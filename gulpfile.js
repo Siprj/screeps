@@ -134,7 +134,9 @@ gulp.task('watch', function () {
     });
 });
 
-gulp.task('build', gulp.series('upload', function buildDone(done) {
+// To upload the code automatically to the screeps server change `compile` to `upload` ;).
+// That will do the trick.
+gulp.task('build', gulp.series('compile', function buildDone(done) {
   gutil.log(gutil.colors.green('Build done'));
   return done();
 }));

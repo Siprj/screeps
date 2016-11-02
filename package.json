@@ -11,6 +11,7 @@
     "deploy-prod": "gulp build --target prod",
     "start": "gulp watch",
     "prod": "gulp watch --target prod",
+    "build": "gulp build --target prod",
     "test": "gulp test",
     "tslint": "tslint 'src/**/*.ts'; echo",
     "typings": "typings",
