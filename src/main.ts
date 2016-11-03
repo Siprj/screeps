@@ -1,5 +1,7 @@
-import harvester = require("./harvester");
-import upgrader = require("./upgrader");
+// import harvester = require("./harvester");
+import * as harvester from "./harvester";
+import * as upgrader from "./upgrader";
+// import upgrader = require("./upgrader");
 /**
  * This function is executed *every tick*.
  *
