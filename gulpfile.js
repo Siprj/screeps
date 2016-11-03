@@ -31,11 +31,6 @@ try {
   process.exit();
 }
 
-if (!config.user || !config.user.email || !config.user.password) {
-  gutil.log(gutil.colors.red('ERROR'), 'Invalid "config.json" file: cannot find user credentials');
-  process.exit();
-}
-
 if (!config.targets) {
   gutil.log(gutil.colors.red('ERROR'), 'Invalid "config.json" file: cannot find build targets');
   process.exit();
@@ -117,12 +112,6 @@ gulp.task('compile-flattened', gulp.series(
 
 gulp.task('compile', gulp.series(buildConfig.bundle ? 'compile-bundled' : 'compile-flattened'));
 
-gulp.task('upload', gulp.series('compile', function uploading() {
-  return gulp.src('dist/' + buildTarget + '/*.js')
-    .pipe(gulpRename((path) => path.extname = ''))
-    .pipe(gulpScreepsUpload(config.user.email, config.user.password, buildConfig.branch, 0));
-}));
-
 gulp.task('watch', function () {
   gulp.watch('src/**/*.ts', gulp.series('build'))
     .on('all', function(event, path, stats) {
@@ -134,8 +123,6 @@ gulp.task('watch', function () {
     });
 });
 
-// To upload the code automatically to the screeps server change `compile` to `upload` ;).
-// That will do the trick.
 gulp.task('build', gulp.series('compile', function buildDone(done) {
   gutil.log(gutil.colors.green('Build done'));
   return done();

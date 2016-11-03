@@ -1,0 +1,17 @@
+{
+  "defaultTarget": "dev",
+  "targets": {
+    "dev": {
+      "branch": "default",
+      "bundle": false,
+      "lint": true,
+      "lintRequired": false
+    },
+    "prod": {
+      "branch": "default",
+      "bundle": true,
+      "lint": true,
+      "lintRequired": true
+    }
+  }
+}
