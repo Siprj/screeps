@@ -15,7 +15,8 @@
     "test": "gulp test",
     "tslint": "tslint 'src/**/*.ts'; echo",
     "typings": "typings",
-    "jshint-gulp": "jshint gulpfile.js libs/gulp*.js; echo"
+    "jshint-gulp": "jshint gulpfile.js libs/gulp*.js; echo",
+    "remote": "node remote.js"
   },
   "author": "",
   "license": "MIT",
@@ -32,6 +33,7 @@
     "lodash": "^4.14.0",
     "q": "^1.4.1",
     "recast": "^0.11.10",
+    "screeps-remote": "^1.0.0",
     "through2": "^2.0.1",
     "ts-loader": "^0.8.2",
     "tslint": "^3.13.0",

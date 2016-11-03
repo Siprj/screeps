@@ -51,7 +51,7 @@ export class ControlledRoom extends BaseRoom {
     let spawns: Spawn[] = this.room.find<Spawn>(FIND_MY_SPAWNS, {
       filter: function (spawn: Spawn) {
         return spawn.spawning === null;
-      },
+      }
     });
 
     if (this.debug) {
@@ -87,7 +87,7 @@ export class ControlledRoom extends BaseRoom {
 
     let properties = {
       role: role,
-      room: this.room.name,
+      room: this.room.name
     };
 
     if (body) {
@@ -113,7 +113,7 @@ export class ControlledRoom extends BaseRoom {
   private checkMemory() {
     if (!this.room.memory.workers) {
       this.room.memory.workers = {
-        harvesters: 0,
+        harvesters: 0
       };
     }
   }
