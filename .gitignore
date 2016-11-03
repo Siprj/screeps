@@ -28,6 +28,3 @@ nbproject
 *.sublime-project
 *.sublime-workspace
 .idea
-
-# Ignore atom artefacts
-*.js
