@@ -21,6 +21,7 @@
     "deep-equal": "^1.0.1",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-clean": "^0.3.2",
+    "gulp-closure-compiler": "^0.4.0",
     "gulp-collect": "^0.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-tslint": "^6.0.1",
@@ -38,5 +39,8 @@
     "typings": "^1.3.0",
     "webpack": "^1.13.1",
     "webpack-stream": "^3.2.0"
+  },
+  "dependencies": {
+    "google-closure-compiler": "^20161024.1.0"
   }
 }

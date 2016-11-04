@@ -1,10 +1,7 @@
 {
-  "defaultTarget": "prod",
-  "targets": {
-    "prod": {
-      "bundle": true,
-      "lint": true,
-      "lintRequired": true
-    }
+  "target": {
+    "bundle": true,
+    "lint": true,
+    "lintRequired": true
   }
 }

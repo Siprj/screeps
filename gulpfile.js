@@ -13,6 +13,7 @@ const ts = require('gulp-typescript');
 const tslint = require('gulp-tslint');
 const tsProject = ts.createProject('tsconfig.json', { typescript: require('typescript') });
 const webpack = require('webpack-stream');
+const closureCompiler = require('gulp-closure-compiler');
 
 /********/
 /* INIT */
@@ -31,13 +32,8 @@ try {
   process.exit();
 }
 
-if (!config.targets) {
-  gutil.log(gutil.colors.red('ERROR'), 'Invalid "config.json" file: cannot find build targets');
-  process.exit();
-}
-
-if (!config.defaultTarget || !config.targets[config.defaultTarget]) {
-  gutil.log(gutil.colors.red('ERROR'), 'Invalid "config.json" file: cannot find default build target');
+if (!config.target) {
+  gutil.log(gutil.colors.red('ERROR'), 'Invalid "config.json" file: cannot find build target');
   process.exit();
 }
 
@@ -54,8 +50,7 @@ if (gutil.env.target) {
   gutil.log('Using default build target', gutil.colors.magenta(config.defaultTarget));
 }
 
-const buildTarget = gutil.env.target || config.defaultTarget;
-const buildConfig = config.targets[buildTarget];
+const buildConfig = config.target;
 
 /*********/
 /* TASKS */
@@ -77,15 +72,24 @@ gulp.task('lint', function(done) {
 });
 
 gulp.task('clean', function () {
-  return gulp.src(['dist/tmp/', 'dist/' + buildTarget], { read: false, allowEmpty: true })
+  return gulp.src(['dist/tmp/', 'dist/'], { read: false, allowEmpty: true })
     .pipe(clean());
 });
 
-gulp.task('compile', gulp.series(gulp.parallel('lint', 'clean'), function bundle() {
+gulp.task('compile', gulp.series(gulp.parallel('lint', 'clean'), function compile() {
   const webpackConfig = require('./webpack.config.js');
   return gulp.src('src/main.ts')
     .pipe(webpack(webpackConfig))
-    .pipe(gulp.dest('dist/' + buildTarget));
+    .pipe(gulp.dest('dist/tmp/'));
+}));
+
+gulp.task('optimize', gulp.series('compile', function optimize (compilation) {
+    return gulp.src('dist/tmp/**/*.js')
+      .pipe(closureCompiler({
+        compilerPath: 'node_modules/google-closure-compiler/compiler.jar',
+        fileName: 'out.js'
+      }))
+      .pipe(gulp.dest('dist/'));
 }));
 
 gulp.task('watch', function () {
@@ -99,7 +103,7 @@ gulp.task('watch', function () {
     });
 });
 
-gulp.task('build', gulp.series('compile', function buildDone(done) {
+gulp.task('build', gulp.series('optimize', function buildDone(done) {
   gutil.log(gutil.colors.green('Build done'));
   return done();
 }));
