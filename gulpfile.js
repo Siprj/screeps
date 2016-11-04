@@ -81,36 +81,12 @@ gulp.task('clean', function () {
     .pipe(clean());
 });
 
-gulp.task('compile-bundled', gulp.series(gulp.parallel('lint', 'clean'), function bundle() {
+gulp.task('compile', gulp.series(gulp.parallel('lint', 'clean'), function bundle() {
   const webpackConfig = require('./webpack.config.js');
   return gulp.src('src/main.ts')
     .pipe(webpack(webpackConfig))
     .pipe(gulp.dest('dist/' + buildTarget));
 }));
-
-gulp.task('compile-flattened', gulp.series(
-  gulp.parallel('lint', 'clean'),
-  function tsc() {
-    global.compileFailed = false;
-    return tsProject.src()
-      .pipe(tsProject())
-      .on('error', (err) => global.compileFailed = true)
-      .js.pipe(gulp.dest('dist/tmp'));
-  },
-  function checkTsc(done) {
-    if (!global.compileFailed) {
-      return done();
-    }
-    throw new PluginError("gulp-typescript", "failed to compile: not executing further tasks");
-  },
-  function flatten() {
-    return gulp.src('dist/tmp/**/*.js')
-      .pipe(gulpDotFlatten(0))
-      .pipe(gulp.dest('dist/' + buildTarget));
-  }
-));
-
-gulp.task('compile', gulp.series(buildConfig.bundle ? 'compile-bundled' : 'compile-flattened'));
 
 gulp.task('watch', function () {
   gulp.watch('src/**/*.ts', gulp.series('build'))

@@ -7,11 +7,8 @@
   "scripts": {
     "gulp": "gulp",
     "postinstall": "typings install",
-    "deploy": "gulp build",
-    "deploy-prod": "gulp build --target prod",
     "start": "gulp watch",
-    "prod": "gulp watch --target prod",
-    "build": "gulp build --target prod",
+    "build": "gulp build",
     "test": "gulp test",
     "tslint": "tslint 'src/**/*.ts'; echo",
     "typings": "typings",
