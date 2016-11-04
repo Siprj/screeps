@@ -84,9 +84,9 @@ gulp.task('optimize', gulp.series('compile', function optimize (compilation) {
     return gulp.src('dist/tmp/**/*.js')
       .pipe(closureCompiler({
         compilerPath: 'node_modules/google-closure-compiler/compiler.jar',
-        fileName: 'out.js'
+        fileName: 'main.js'
       }))
-      .pipe(gulp.dest('dist/'));
+      .pipe(gulp.dest('dist/out'));
 }));
 
 gulp.task('watch', function () {

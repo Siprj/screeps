@@ -1,7 +1,7 @@
 module.exports = {
   entry: "./src/main.ts",
   output: {
-    filename: "./main.js",
+    filename: "./intermediate_main.js",
     pathinfo: true,
     libraryTarget: "commonjs2",
   },
