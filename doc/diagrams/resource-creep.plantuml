@@ -1,0 +1,23 @@
+@startuml
+
+state "Move to extension" as MoveToExtension
+state "Supply extension" as Extension
+state "Supply spawn" as Spawn
+state "Move to spawn" as MoveToSpawn
+state "Move to harvest location" as MoveToHarvest
+
+note "Filling the spawn is prioritised over the extensions" as N1
+
+[*] -down-> Wating
+Wating -down-> MoveToHarvest : There is something to fill
+Wating -down-> MoveToExtension
+Wating -down-> MoveToSpawn
+MoveToHarvest --> Harvesting
+MoveToExtension --> Extension : Fill Extension if possible
+Harvesting --> MoveToExtension : Fill Extension if possible
+MoveToSpawn --> Spawn : Fill Spawn if possible
+Harvesting --> MoveToSpawn : Fill Spawn if possible
+Extension -up-> Wating
+Spawn -up-> Wating
+
+@enduml
