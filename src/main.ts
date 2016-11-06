@@ -22,22 +22,20 @@ export function loop()
             console.log("Clearing non-existing creep memory:", name);
         }
     }
+
     let harvesters = _.filter(Game.creeps, (creep) => creep.memory.role === "harvester");
     console.log("Harvesters: " + harvesters.length);
-
-    let building = false;
 
     if (harvesters.length < 2)
     {
         let newName = Game.spawns["Spawn1"].createCreep([WORK, CARRY, MOVE, MOVE],
             undefined, {role: "harvester", state: 0});
         console.log("Spawning new harvester: " + newName);
-        building = true;
     }
 
     let upgraders = _.filter(Game.creeps, (creep) => creep.memory.role === "upgrader");
     console.log("Upgraders: " + upgraders.length);
-    if (upgraders.length < 6 && !building)
+    if (upgraders.length < 6 && Game.spawns["Spawn1"].spawning == null)
     {
         let newName = Game.spawns["Spawn1"].createCreep([WORK, CARRY, MOVE, MOVE], undefined, {role: "upgrader"});
         console.log("Spawning new upgrader: " + newName);
