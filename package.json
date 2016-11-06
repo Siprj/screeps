@@ -13,7 +13,7 @@
     "tslint": "tslint 'src/**/*.ts'; echo",
     "typings": "typings",
     "jshint-gulp": "jshint gulpfile.js libs/gulp*.js; echo",
-    "remote": "node remote.js"
+    "remote": "(cd remote && stack install --local-bin-path '../dist/tools/') && ./dist/tools/screeps-remote"
   },
   "author": "",
   "license": "MIT",
