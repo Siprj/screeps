@@ -8,7 +8,8 @@
     "experimentalDecorators": true,
     "strictNullChecks": true,
     "noUnusedParameters": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "outDir": "/dev/null"
   },
   "compileOnSave": false,
   "include": [
