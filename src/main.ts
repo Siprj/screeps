@@ -18,6 +18,7 @@ export function loop()
     {
         if (!Game.creeps[name])
         {
+            // Maybe garbage collecting of some other stuff will be needed here.
             delete Memory.creeps[name];
             console.log("Clearing non-existing creep memory:", name);
         }
@@ -26,18 +27,22 @@ export function loop()
     let harvesters = _.filter(Game.creeps, (creep) => creep.memory.role === "harvester");
     console.log("Harvesters: " + harvesters.length);
 
+    Game.spawns["Spawn1"].memory.building = false;
     if (harvesters.length < 2)
     {
         let newName = Game.spawns["Spawn1"].createCreep([WORK, CARRY, MOVE, MOVE],
             undefined, {role: "harvester", state: 0});
+        Game.spawns["Spawn1"].memory.building = true;
         console.log("Spawning new harvester: " + newName);
     }
 
     let upgraders = _.filter(Game.creeps, (creep) => creep.memory.role === "upgrader");
     console.log("Upgraders: " + upgraders.length);
-    if (upgraders.length < 6 && Game.spawns["Spawn1"].spawning == null)
+    if (upgraders.length < 6 && Game.spawns["Spawn1"].memory.building === false)
     {
-        let newName = Game.spawns["Spawn1"].createCreep([WORK, CARRY, MOVE, MOVE], undefined, {role: "upgrader"});
+        let newName = Game.spawns["Spawn1"].createCreep([WORK, CARRY, MOVE, MOVE],
+            undefined, {role: "upgrader", tate: 0});
+        Game.spawns["Spawn1"].memory.building = true;
         console.log("Spawning new upgrader: " + newName);
     }
 

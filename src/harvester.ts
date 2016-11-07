@@ -8,7 +8,7 @@ export const enum RoleHarvesterState {
 
 function processHarvesting(creep: Creep) {
     creep.memory.state = RoleHarvesterState.WAITING;
-    console.log("Processing Harvesting");
+    // console.log("Processing Harvesting");
     let sources = creep.room.find(FIND_SOURCES);
     creep.memory.pokus = sources[0];
     if (creep.harvest(creep.memory.pokus) === ERR_NOT_IN_RANGE) {
@@ -31,14 +31,14 @@ function processHarvesting(creep: Creep) {
 }
 
 function processMowingToSpawn(creep: Creep) {
-    console.log("Processing MovingToSPawn");
-    console.log("Path length: " + creep.memory.path);
+    // console.log("Processing MovingToSPawn");
+    // console.log("Path length: " + creep.memory.path);
     let res = creep.moveByPath(creep.memory.path);
-    console.log("Res: " + res);
-    console.log("Pokus pos: " + creep.pos);
-    console.log("Pokus targetPos: " + creep.memory.targetPos.x);
+    // console.log("Res: " + res);
+    // console.log("Pokus pos: " + creep.pos);
+    // console.log("Pokus targetPos: " + creep.memory.targetPos.x);
     let pos = creep.memory.targetPos;
-    console.log("Pokus: " + creep.pos.isNearTo(pos.x, pos.y));
+    // console.log("Pokus: " + creep.pos.isNearTo(pos.x, pos.y));
     if (creep.pos.isNearTo(pos.x, pos.y)) {
         creep.memory.state = RoleHarvesterState.SUPPLYING_SPAWN;
     }
@@ -73,7 +73,7 @@ function processMowingToSpawn(creep: Creep) {
 }
 
 function processSupplyingSpawn(creep: Creep) {
-    console.log("Processing SupplyingSpawn");
+    // console.log("Processing SupplyingSpawn");
     let targets = creep.room.find<StructureSpawn>(FIND_STRUCTURES, {
         filter: (structure: StructureSpawn) => {
             return (structure.structureType === STRUCTURE_EXTENSION
@@ -93,23 +93,23 @@ function processSupplyingSpawn(creep: Creep) {
 }
 
 function processSupplyingExtension(creep: Creep) {
-    console.log("Processing SupplyingExtensio");
+    // console.log("Processing SupplyingExtensio");
     creep.memory.state = RoleHarvesterState.WAITING;
 }
 
 function processWaiting(creep: Creep) {
-    console.log("Processing Waiting!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    console.log("Processing Waiting");
-    console.log("creep.room.energyAvailable: " + creep.room.energyAvailable);
-    console.log("creep.room.energyCapacityAvailable: " + creep.room.energyCapacityAvailable);
+    // console.log("Processing Waiting!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    // console.log("Processing Waiting");
+    // console.log("creep.room.energyAvailable: " + creep.room.energyAvailable);
+    // console.log("creep.room.energyCapacityAvailable: " + creep.room.energyCapacityAvailable);
     if (creep.room.energyAvailable < creep.room.energyCapacityAvailable) {
-        console.log("Make creep harvest");
-        console.log("Creep state befor change: " + creep.memory.state);
+        // console.log("Make creep harvest");
+        // console.log("Creep state befor change: " + creep.memory.state);
         let sources = creep.room.find(FIND_SOURCES);
         creep.memory.pokus = sources[0];
-        console.log("Creep pokus set to source: " + creep.memory.pokus);
+        // console.log("Creep pokus set to source: " + creep.memory.pokus);
         creep.memory.state = RoleHarvesterState.HARVESTING;
-        console.log("Creep state after change: " + creep.memory.state);
+        // console.log("Creep state after change: " + creep.memory.state);
     }
 }
 
