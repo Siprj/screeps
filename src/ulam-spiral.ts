@@ -2,7 +2,7 @@
 
 import {Point} from "./point";
 
-export function siralAroundSpawn (n: number, spawnPos: Point): Point
+export function siralAroundPoint (n: number, spawnPos: Point): Point
 {
     let pos = spiral((n * 2) + 1);
     pos.x += spawnPos.x;
