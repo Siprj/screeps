@@ -14,7 +14,6 @@ function processMoveingToSource(creep: Creep)
     console.log(creep.name + "Processing MowingToSource!!!!!");
     console.log(creep.name + "Processing MowingToSource");
     // console.log("Path: " + creep.memory.path);
-    let res = creep.moveByPath(creep.memory.path);
     // console.log("Res: " + res);
     // console.log("Pokus pos: " + creep.pos);
     // console.log("Pokus targetPos: " + creep.memory.targetPos.x);
@@ -25,6 +24,14 @@ function processMoveingToSource(creep: Creep)
         processHarvesting(creep);
     }
     else {
+        if (creep.memory.previousPosition === creep.pos)
+        {
+            console.log(creep.name + "recalculating the route");
+            creep.memory.path = creep.pos.findPathTo(targetPos.x, targetPos.y);
+        }
+
+        creep.memory.previousPosition = creep.pos;
+        let res = creep.moveByPath(creep.memory.path);
         switch (res) {
             case OK:
                 // code
@@ -149,7 +156,6 @@ function processWaiting(creep: Creep) {
 function processMowingToController(creep: Creep) {
     console.log(creep.name + "Processing MowingToController");
     // console.log("Path length: " + creep.memory.path);
-    let res = creep.moveByPath(creep.memory.path);
     // console.log("Res: " + res);
     // console.log("Pokus pos: " + creep.pos);
     // console.log("Pokus targetPos: " + creep.memory.targetPos.x);
@@ -161,6 +167,14 @@ function processMowingToController(creep: Creep) {
         processHarvesting(creep);
     }
     else {
+        if (creep.memory.previousPosition === creep.pos)
+        {
+            console.log(creep.name + "recalculating the route");
+            creep.memory.path = creep.pos.findPathTo(targetPos.x, targetPos.y);
+        }
+
+        creep.memory.previousPosition = creep.pos;
+        let res = creep.moveByPath(creep.memory.path);
         switch (res) {
             case OK:
                 // code
