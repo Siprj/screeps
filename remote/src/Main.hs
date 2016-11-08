@@ -24,6 +24,7 @@ dstBranch = "default"
 
 main :: IO ()
 main = do
+    print $ "Branch: " <> dstBranch
     curDir <- getCurrentDirectory
     (userName, password) <- getUserNameAndPassword
     jss <- findJs $ curDir </> artefactDirectory
