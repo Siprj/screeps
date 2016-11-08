@@ -13,65 +13,102 @@ function processMoveingToSource(creep: Creep)
 {
     console.log(creep.name + "Processing MowingToSource!!!!!");
     console.log(creep.name + "Processing MowingToSource");
+    if (moveToTargetInRangeOf(creep, 1) === true)
+    {
+        creep.memory.state = RoleUpgraderState.HARVESTING;
+    }
+}
+
+/**
+ * Move creap to it's destination and stops in range.
+ * Some hiden (in creap local memory) parameters:
+ * * Target is given by internal creep memory creep.memory.targetPos;
+ * * Precalculated path is store in creep.memory.path;
+ * * Previous creap position is stored in creep.memory.path;
+ *
+ * @param creep Creep creep which should move.
+ * @param range number how close to the target the creep needs to get.
+ * @returns true if is is at it's destinatio, false if not.
+ */
+function moveToTargetInRangeOf(creep: Creep, range: number): boolean
+{
+    console.log(creep.name + "moveToTargetInRangeOf");
+    // console.log(creep.name + "Processing MowingToSource");
     // console.log("Path: " + creep.memory.path);
     // console.log("Res: " + res);
     // console.log("Pokus pos: " + creep.pos);
     // console.log("Pokus targetPos: " + creep.memory.targetPos.x);
+
     let targetPos = creep.memory.targetPos;
     // console.log("Pokus: " + creep.pos.isNearTo(targetPos.x, targetPos.y));
-    if (creep.pos.isNearTo(targetPos.x, targetPos.y)) {
-        creep.memory.state = RoleUpgraderState.HARVESTING;
-        processHarvesting(creep);
-    }
-    else {
-        if (creep.memory.previousPosition === creep.pos)
-        {
-            console.log(creep.name + "recalculating the route");
-            creep.memory.path = creep.pos.findPathTo(targetPos.x, targetPos.y);
-        }
 
+    // Object in memory are type of Object and there is no easy way how to
+    // convert them back to original form/type. So there is small "shortcut" to
+    // creating the RoomPosition object ;).
+    let targetRoomPos =
+        <RoomPosition> creep.room.getPositionAt(targetPos.x, targetPos.y);
+    if (creep.pos.inRangeTo(targetRoomPos, range)) {
+        return true;
+    }
+    else
+    {
+        // There is need to check previous creep position and current creep
+        // position to prevent blocking the creap by another creep before him...
+        // Because the function moveByPath() is not checking if folowint path is
+        // blocked by another standing creap.
+        if (creep.memory.previousPosition)
+        {
+            let prevPos = <RoomPosition> creep.memory.previousPosition;
+            if (arePositionsEqual(prevPos, creep.pos))
+            {
+                console.log(creep.name + "recalculating the route");
+                creep.memory.path = creep.pos.findPathTo(targetPos.x, targetPos.y);
+            }
+        }
         creep.memory.previousPosition = creep.pos;
+
         let res = creep.moveByPath(creep.memory.path);
         switch (res) {
             case OK:
-                // code
-                console.log(creep.name + " processMowingToController: OK");
                 break;
             case ERR_NOT_OWNER:
-                // code
-                console.log(creep.name + " processMowingToController: ERR_NOT_OWNER");
+                // TODO: This is critical error ...
+                console.log("Critical ERROR: " + creep.name
+                    + " moveToTargetInRangeOf: ERR_NOT_OWNER");
                 break;
             case ERR_BUSY:
-                // code
-                console.log(creep.name + " processMowingToController: ERR_BUSY");
+                // Creap is still being spowned....
                 break;
             case ERR_NOT_FOUND:
                 creep.memory.path = creep.pos.findPathTo(targetPos.x, targetPos.y);
-                console.log(creep.name + " processMowingToController: ERR_NOT_FOUND");
+                console.log(creep.name + " moveToTargetInRangeOf: ERR_NOT_FOUND");
                 break;
             case ERR_INVALID_ARGS:
-                // code
-                console.log(creep.name + " processMowingToController: ERR_INVALID_ARGS");
+                // TODO: This is critical error maybe I shoud send some
+                // notification.
+                console.log("Critical ERROR: " + creep.name
+                    + " moveToTargetInRangeOf: ERR_INVALID_ARGS");
                 break;
             case ERR_TIRED:
-                // code
-                console.log(creep.name + " processMowingToController: ERR_TIRED");
+                // TODO: This error code may be usefull in future. For example:
+                //  * I want renge create to fite if it can't move...
                 break;
             case ERR_NO_BODYPART:
-                // code
-                console.log(creep.name + " processMowingToController: ERR_NO_BODYPART");
+                // TODO: This is similar to previous error code.
                 break;
 
             default:
-            // code
-                console.log(creep.name + " processMowingToController: default");
+                // TODO: Critical error notification should be send.
+                console.log("Critical ERROR: " + creep.name
+                    + " moveToTargetInRangeOf: default");
         }
     }
+    return false;
 }
 
 function processHarvesting(creep: Creep) {
     // console.log("Processing Harvesting");
-    // There is moltiple ways how to acquire source where is the creap suspse to
+    // There is multiple ways how to acquire source where is the creap suspse to
     // harvest:
     //    * Store source id and find source by id,
     //      see: http://support.screeps.com/hc/en-us/articles/203016382-Game#getObjectById
@@ -81,8 +118,9 @@ function processHarvesting(creep: Creep) {
     //    * Use lookAt() function to find out which object are available at the
     //      position and filter out the source,
     //      see: http://support.screeps.com/hc/en-us/articles/203079011-Room#lookAt
-    let sources = <Source[]> creep.room.find(FIND_SOURCES, {filter: { pos: creep.memory.targetPos}});
-    // let source =
+    let sources = <Source[]> creep.room.find(FIND_SOURCES,
+        {filter: { pos: creep.memory.targetPos}});
+
     if (sources.length !== 0)
     {
         let source = sources[0];
@@ -93,11 +131,11 @@ function processHarvesting(creep: Creep) {
     // TODO: Thing about next destination (this may be used done in some another
     // state).
     if (creep.carry.energy >= creep.carryCapacity) {
-        if (creep.room.controller !== null)
+        if (creep.room.controller)
         {
-            let targets = <StructureController> creep.room.controller;
-            creep.memory.path = creep.pos.findPathTo(targets.pos);
-            creep.memory.targetPos = targets.pos;
+            let target = <StructureController> creep.room.controller;
+            creep.memory.path = creep.pos.findPathTo(target.pos);
+            creep.memory.targetPos = target.pos;
             creep.memory.state = RoleUpgraderState.MOVING_TO_CONTROLLER;
             processMowingToController(creep);
         }
@@ -153,88 +191,20 @@ function processWaiting(creep: Creep) {
     // console.log("Creep state after change: " + creep.memory.state);
 }
 
+function arePositionsEqual(p1: RoomPosition, p2: RoomPosition): boolean
+{
+    return (p1.x === p2.x && p1.y === p2.y && p1.roomName === p2.roomName);
+}
+
 function processMowingToController(creep: Creep) {
     console.log(creep.name + "Processing MowingToController");
-    // console.log("Path length: " + creep.memory.path);
-    // console.log("Res: " + res);
-    // console.log("Pokus pos: " + creep.pos);
-    // console.log("Pokus targetPos: " + creep.memory.targetPos.x);
-    let targetPos = creep.memory.targetPos;
-    let targetRoomPos = <RoomPosition> creep.room.getPositionAt(targetPos.x, targetPos.y);
-    console.log("Pokus: " + creep.pos.inRangeTo(targetRoomPos, UPGRADING_RANGE));
-    if (creep.pos.inRangeTo(targetRoomPos, UPGRADING_RANGE)) {
+    if (moveToTargetInRangeOf(creep, UPGRADING_RANGE) === true)
+    {
         creep.memory.state = RoleUpgraderState.SUPPLYING_CONTROLLER;
-        processHarvesting(creep);
-    }
-    else {
-        if (creep.memory.previousPosition === creep.pos)
-        {
-            console.log(creep.name + "recalculating the route");
-            creep.memory.path = creep.pos.findPathTo(targetPos.x, targetPos.y);
-        }
-
-        creep.memory.previousPosition = creep.pos;
-        let res = creep.moveByPath(creep.memory.path);
-        switch (res) {
-            case OK:
-                // code
-                console.log(creep.name + "processMowingToController: OK");
-                break;
-            case ERR_NOT_OWNER:
-                // code
-                console.log(creep.name + "processMowingToController: ERR_NOT_OWNER");
-                break;
-            case ERR_BUSY:
-                // code
-                console.log(creep.name + "processMowingToController: ERR_BUSY");
-                break;
-            case ERR_NOT_FOUND:
-                console.log(creep.name + "processMowingToController: ERR_NOT_FOUND");
-                creep.memory.path = creep.pos.findPathTo(targetRoomPos);
-                break;
-            case ERR_INVALID_ARGS:
-                // code
-                console.log(creep.name + "processMowingToController: ERR_INVALID_ARGS");
-                break;
-            case ERR_TIRED:
-                // code
-                console.log(creep.name + "processMowingToController: ERR_TIRED");
-                break;
-            case ERR_NO_BODYPART:
-                // code
-                console.log(creep.name + "processMowingToController: ERR_NO_BODYPART");
-                break;
-
-            default:
-            // code
-                console.log(creep.name + "processMowingToController: default");
-        }
     }
 }
 
 export function run(creep: Creep) {
-
-    // if (creep.memory.upgrading && creep.carry.energy === 0) {
-    //     creep.memory.upgrading = false;
-    //     creep.say("harvesting");
-    // }
-    // if (!creep.memory.upgrading && creep.carry.energy === creep.carryCapacity) {
-    //     creep.memory.upgrading = true;
-    //     creep.say("upgrading");
-    // }
-    //
-    // if (creep.memory.upgrading) {
-    //     if (creep.upgradeController(<StructureController> creep.room.controller) === ERR_NOT_IN_RANGE) {
-    //         creep.moveTo(<StructureController> creep.room.controller);
-    //     }
-    // }
-    // else {
-    //     let sources = creep.room.find<Source>(FIND_SOURCES);
-    //     if (creep.harvest(sources[0]) === ERR_NOT_IN_RANGE) {
-    //         creep.moveTo(sources[0]);
-    //     }
-    // }
-
     switch (creep.memory.state) {
         case RoleUpgraderState.HARVESTING:
             processHarvesting(creep);
