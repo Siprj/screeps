@@ -30,15 +30,7 @@ export function prepareCreepMovement(creep: Creep, target: RoomPosition)
  */
 export function moveToTargetInRangeOf(creep: Creep, range: number): boolean
 {
-    console.log(creep.name + "moveToTargetInRangeOf");
-    // console.log(creep.name + "Processing MowingToSource");
-    // console.log("Path: " + creep.memory.path);
-    // console.log("Res: " + res);
-    // console.log("Pokus pos: " + creep.pos);
-    // console.log("Pokus targetPos: " + creep.memory.targetPos.x);
-
     let targetPos = creep.memory.targetPos;
-    // console.log("Pokus: " + creep.pos.isNearTo(targetPos.x, targetPos.y));
 
     // Object in memory are type of Object and there is no easy way how to
     // convert them back to original form/type. So there is small "shortcut" to
@@ -72,7 +64,6 @@ export function moveToTargetInRangeOf(creep: Creep, range: number): boolean
                     let prevPos = <RoomPosition> creep.memory.previousPosition;
                     if (arePositionsEqual(prevPos, creep.pos))
                     {
-                        console.log(creep.name + "recalculating the route");
                         recalculatePath(creep, targetRoomPos);
                     }
                 }
@@ -103,7 +94,6 @@ export function moveToTargetInRangeOf(creep: Creep, range: number): boolean
                 break;
             case ERR_NOT_FOUND:
                 recalculatePath(creep, targetRoomPos);
-                console.log(creep.name + " moveToTargetInRangeOf: ERR_NOT_FOUND");
                 break;
             case ERR_INVALID_ARGS:
                 // TODO: This is critical error maybe I shoud send some

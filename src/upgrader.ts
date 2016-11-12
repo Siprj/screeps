@@ -13,8 +13,6 @@ const UPGRADING_RANGE = 3;
 
 function processMoveingToSource(creep: Creep)
 {
-    console.log(creep.name + "Processing MowingToSource!!!!!");
-    console.log(creep.name + "Processing MowingToSource");
     if (moveToTargetInRangeOf(creep, 1) === true)
     {
         creep.memory.state = RoleUpgraderState.HARVESTING;
@@ -57,13 +55,12 @@ function processHarvesting(creep: Creep) {
         {
             // TODO: After expanding to new rooms where is no controler think
             // about better handling.
-            console.log(creep.name + "Room controller is null!!!!");
+            console.log("Critical ERROR: " + creep.name + " Room controller is null!!!!");
         }
     }
 }
 
 function processSupplyingController(creep: Creep) {
-    console.log(creep.name + "Processing SupplyingController");
 
     if (creep.room.controller !== null)
     {
@@ -73,7 +70,7 @@ function processSupplyingController(creep: Creep) {
     {
         // TODO: After expanding to new rooms where is no controler think
         // about better handling.
-        console.log(creep.name + "Room controller is null!!!!");
+        console.log("Critical ERROR: " + creep.name + " Room controller is null!!!!");
     }
 
     if (creep.carry[RESOURCE_ENERGY] === 0) {
@@ -84,11 +81,6 @@ function processSupplyingController(creep: Creep) {
 }
 
 function processWaiting(creep: Creep) {
-    console.log(creep.name + "Processing Waiting!!!!!!!!!");
-    // console.log("creep.room.energyAvailable: " + creep.room.energyAvailable);
-    // console.log("creep.room.energyCapacityAvailable: " + creep.room.energyCapacityAvailable);
-    // console.log("Make creep harvest");
-    // console.log("Creep state befor change: " + creep.memory.state);
     // TODO: Acquire source based on it's load.
     let source = <Source> creep.room.find(FIND_SOURCES)[0];
 
@@ -98,11 +90,9 @@ function processWaiting(creep: Creep) {
     // Now lets move to source
     creep.memory.state = RoleUpgraderState.MOVING_TO_SOURCE;
     processMoveingToSource(creep);
-    // console.log("Creep state after change: " + creep.memory.state);
 }
 
 function processMowingToController(creep: Creep) {
-    console.log(creep.name + "Processing MowingToController");
     if (moveToTargetInRangeOf(creep, UPGRADING_RANGE) === true)
     {
         creep.memory.state = RoleUpgraderState.SUPPLYING_CONTROLLER;
