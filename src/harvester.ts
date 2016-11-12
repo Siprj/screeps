@@ -1,4 +1,4 @@
-import {moveToTargetInRangeOf} from "./creep/movement";
+import {moveToTargetInRangeOf, prepareCreepMovement} from "./creep/movement";
 
 export const enum RoleHarvesterState {
     WAITING = 0,
@@ -10,7 +10,6 @@ export const enum RoleHarvesterState {
 };
 
 function processHarvesting(creep: Creep) {
-    creep.memory.state = RoleHarvesterState.WAITING;
     // console.log("Processing Harvesting");
     let sources = creep.room.find(FIND_SOURCES);
     creep.memory.pokus = sources[0];
@@ -23,9 +22,9 @@ function processHarvesting(creep: Creep) {
                 return (structure.structureType === STRUCTURE_SPAWN);
             }
         });
-        creep.memory.path = creep.pos.findPathTo(targets[0].pos);
-        creep.memory.targetPos = targets[0].pos;
+        prepareCreepMovement(creep, targets[0].pos);
         creep.memory.state = RoleHarvesterState.MOVING_TO_SPAWN;
+        processMowingToSpawn(creep);
     }
 }
 
@@ -72,11 +71,7 @@ function processWaiting(creep: Creep) {
 
         // Set destination position and precompute path to make the rest of movement
         // more efective.
-        let targetPos = source.pos;
-        creep.memory.targetPos = targetPos;
-        creep.memory.path = creep.pos.findPathTo(targetPos);
-        // console.log("Creep pokus set to source: " + creep.memory.path);
-
+        prepareCreepMovement(creep, source.pos);
         // Now lets move to source
         creep.memory.state = RoleHarvesterState.MOVING_TO_SOURCE;
         processMowingToSource(creep);
@@ -109,7 +104,7 @@ export function run(creep: Creep) {
             break;
 
         case RoleHarvesterState.WAITING:
-            processHarvesting(creep);
+            processWaiting(creep);
             break;
 
         case RoleHarvesterState.MOVING_TO_SPAWN:

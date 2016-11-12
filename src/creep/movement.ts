@@ -7,12 +7,20 @@ function recalculatePath(creep: Creep, target: RoomPosition)
     creep.memory.path = creep.pos.findPathTo(target);
 }
 
+export function prepareCreepMovement(creep: Creep, target: RoomPosition)
+{
+    creep.memory.targetPos = target;
+    creep.memory.previousPosition = creep.pos;
+    creep.memory.pathTick = 0;
+    recalculatePath(creep, target);
+}
+
 /**
  * Move creap to it's destination and stops in range.
  * Some hiden (in creap local memory) parameters:
  * * Target is given by internal creep memory creep.memory.targetPos
  * * Precalculated path is store in creep.memory.path
- * * Previous creap position is stored in creep.memory.path
+ * * Previous creep position is stored in creep.memory.previousPosition
  * * Tick when the path will be recalculated, sometimes the creeps go in to
  *   darknes :D. This tick is stored in creep.memory.pathTick
  *
@@ -41,6 +49,7 @@ export function moveToTargetInRangeOf(creep: Creep, range: number): boolean
     }
     else
     {
+        // Check if the memory is not null
         if (creep.memory.pathTick)
         {
             creep.memory.pathTick--;
@@ -54,7 +63,7 @@ export function moveToTargetInRangeOf(creep: Creep, range: number): boolean
                 // Sometimes it may happend that the creep walks of from current
                 // room and if that happens we need to relalculate the path
                 // because the previous path was sopose to led to room exit.
-                if(creep.memory.previousPosition.roomName !== creep.pos.roomName)
+                if (creep.memory.previousPosition.roomName !== creep.pos.roomName)
                 {
                     recalculatePath(creep, targetRoomPos);
                 }

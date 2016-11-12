@@ -1,5 +1,5 @@
 
-import {moveToTargetInRangeOf} from "./creep/movement";
+import {moveToTargetInRangeOf, prepareCreepMovement} from "./creep/movement";
 
 export const enum RoleUpgraderState {
     WAITING = 0,
@@ -49,8 +49,7 @@ function processHarvesting(creep: Creep) {
         if (creep.room.controller)
         {
             let target = <StructureController> creep.room.controller;
-            creep.memory.path = creep.pos.findPathTo(target.pos);
-            creep.memory.targetPos = target.pos;
+            prepareCreepMovement(creep, target.pos);
             creep.memory.state = RoleUpgraderState.MOVING_TO_CONTROLLER;
             processMowingToController(creep);
         }
@@ -95,11 +94,7 @@ function processWaiting(creep: Creep) {
 
     // Set destination position and precompute path to make the rest of movement
     // more efective.
-    let targetPos = source.pos;
-    creep.memory.targetPos = targetPos;
-    creep.memory.path = creep.pos.findPathTo(targetPos.x, targetPos.y);
-    // console.log("Creep pokus set to source: " + creep.memory.path);
-
+    prepareCreepMovement(creep, source.pos);
     // Now lets move to source
     creep.memory.state = RoleUpgraderState.MOVING_TO_SOURCE;
     processMoveingToSource(creep);
