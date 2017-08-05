@@ -9,6 +9,7 @@ export const enum RoleUpgraderState {
     HARVESTING = 4
 };
 
+// TODO: Move to constant file
 const UPGRADING_RANGE = 3;
 
 function processMoveingToSource(creep: Creep)
@@ -31,7 +32,7 @@ function processHarvesting(creep: Creep) {
     //    * Use lookAt() function to find out which object are available at the
     //      position and filter out the source,
     //      see: http://support.screeps.com/hc/en-us/articles/203079011-Room#lookAt
-    let sources = <Source[]> creep.room.find(FIND_SOURCES,
+    const sources = <Source[]> creep.room.find(FIND_SOURCES,
         {filter: { pos: creep.memory.targetPos}});
 
     if (sources.length !== 0)
@@ -43,19 +44,22 @@ function processHarvesting(creep: Creep) {
 
     // TODO: Thing about next destination (this may be used done in some another
     // state).
-    if (creep.carry.energy >= creep.carryCapacity) {
-        if (creep.room.controller)
-        {
-            let target = <StructureController> creep.room.controller;
-            prepareCreepMovement(creep, target.pos);
-            creep.memory.state = RoleUpgraderState.MOVING_TO_CONTROLLER;
-            processMowingToController(creep);
-        }
-        else
-        {
-            // TODO: After expanding to new rooms where is no controler think
-            // about better handling.
-            console.log("Critical ERROR: " + creep.name + " Room controller is null!!!!");
+    if (creep.carry.energy !== undefined)
+    {
+        if (creep.carry.energy >= creep.carryCapacity) {
+            if (creep.room.controller)
+            {
+                let target = <StructureController> creep.room.controller;
+                prepareCreepMovement(creep, target.pos);
+                creep.memory.state = RoleUpgraderState.MOVING_TO_CONTROLLER;
+                processMowingToController(creep);
+            }
+            else
+            {
+                // TODO: After expanding to new rooms where is no controler think
+                // about better handling.
+                console.log("Critical ERROR: " + creep.name + " Room controller is null!!!!");
+            }
         }
     }
 }

@@ -15,6 +15,7 @@
           "singleline": "never"
         }
       ],
+    "typedef-whitespace": [false],
     "variable-name": [
       true,
       "ban-keywords",

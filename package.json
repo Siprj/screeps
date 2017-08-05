@@ -12,8 +12,9 @@
     "test": "gulp test",
     "tslint": "tslint 'src/**/*.ts'; echo",
     "typings": "typings",
-    "jshint-gulp": "jshint gulpfile.js libs/gulp*.js; echo",
-    "remote": "mkdir -p dist/tools/ && (cd remote && stack install --local-bin-path '../dist/tools/') && ./dist/tools/screeps-remote"
+    "jshint-gulp": "jshint gulpfile.js; echo",
+    "remote": "mkdir -p dist/tools/ && (cd remote && stack install --local-bin-path '../dist/tools/') && ./dist/tools/screeps-remote",
+    "doc": "node_modules/typedoc/bin/typedoc --out ./gen-doc/ --includeDeclarations ./"
   },
   "author": "",
   "license": "MIT",
@@ -25,22 +26,24 @@
     "gulp-collect": "^0.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-tslint": "^6.0.1",
-    "gulp-typescript": "^3.0.0",
-    "gulp-util": "^3.0.7",
-    "jshint": "^2.9.2",
-    "lodash": "^4.14.0",
-    "q": "^1.4.1",
-    "recast": "^0.11.10",
-    "screeps-remote": "^1.0.0",
-    "through2": "^2.0.1",
+    "gulp-typescript": "^3.2.1",
+    "gulp-util": "^3.0.8",
+    "jshint": "^2.9.5",
+    "lodash": "^4.17.4",
+    "q": "^1.5.0",
+    "recast": "^0.11.23",
+    "screeps-remote": "^1.0.1",
+    "through2": "^2.0.3",
     "ts-loader": "^0.8.2",
     "tslint": "^3.13.0",
-    "typescript": "^2.0.3",
+    "typescript": "^2.4.2",
     "typings": "^1.3.0",
-    "webpack": "^1.13.1",
-    "webpack-stream": "^3.2.0"
+    "webpack": "^1.15.0",
+    "webpack-stream": "^3.2.0",
+    "typedoc": "^0.8.0"
   },
   "dependencies": {
-    "google-closure-compiler": "^20161024.1.0"
+    "google-closure-compiler": "^20161024.3.0",
+    "typedoc": "^0.8.0"
   }
 }
