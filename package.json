@@ -1,49 +1,47 @@
 {
-  "name": "screeps-starter",
-  "version": "0.0.0",
+  "name": "screeps-typescript-starter",
+  "version": "3.0.0",
   "description": "",
-  "main": "./dist/main.js",
-  "repository": "screepers/screeps-typescript-starter",
+  "main": "index.js",
+  "//": "If you add or change the names of destinations in screeps.json, make sure you update these scripts to reflect the changes",
   "scripts": {
-    "gulp": "gulp",
-    "postinstall": "typings install",
-    "start": "gulp watch",
-    "build": "gulp build",
-    "test": "gulp test",
-    "tslint": "tslint 'src/**/*.ts'; echo",
-    "typings": "typings",
-    "jshint-gulp": "jshint gulpfile.js; echo",
-    "remote": "mkdir -p dist/tools/ && (cd remote && stack install --local-bin-path '../dist/tools/') && ./dist/tools/screeps-remote",
-    "doc": "node_modules/typedoc/bin/typedoc --out ./gen-doc/ --includeDeclarations ./"
+    "lint": "tslint -p tsconfig.json \"src/**/*.ts\"",
+    "build": "rollup -c",
+    "push-main": "rollup -c --environment DEST:main",
+    "push-pserver": "rollup -c --environment DEST:pserver",
+    "push-sim": "rollup -c --environment DEST:sim",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch-main": "rollup -cw --environment DEST:main",
+    "watch-pserver": "rollup -cw --environment DEST:pserver",
+    "watch-sim": "rollup -cw --environment DEST:sim"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/screepers/screeps-typescript-starter.git"
   },
   "author": "",
-  "license": "MIT",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/screepers/screeps-typescript-starter/issues"
+  },
+  "homepage": "https://github.com/screepers/screeps-typescript-starter#readme",
   "devDependencies": {
-    "deep-equal": "^1.0.1",
-    "gulp": "github:gulpjs/gulp#4.0",
-    "gulp-clean": "^0.3.2",
-    "gulp-closure-compiler": "^0.4.0",
-    "gulp-collect": "^0.1.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-tslint": "^6.0.1",
-    "gulp-typescript": "^3.2.1",
-    "gulp-util": "^3.0.8",
-    "jshint": "^2.9.5",
-    "lodash": "^4.17.4",
-    "q": "^1.5.0",
-    "recast": "^0.11.23",
-    "screeps-remote": "^1.0.1",
-    "through2": "^2.0.3",
-    "ts-loader": "^0.8.2",
-    "tslint": "^3.13.0",
-    "typescript": "^2.4.2",
-    "typings": "^1.3.0",
-    "webpack": "^1.15.0",
-    "webpack-stream": "^3.2.0",
-    "typedoc": "^0.8.0"
+    "@types/lodash": "^3.10.1",
+    "@types/node": "^10.5.5",
+    "@types/screeps": "^2.4.0",
+    "prettier": "^1.14.0",
+    "rollup": "^0.63.4",
+    "rollup-plugin-clear": "^2.0.7",
+    "rollup-plugin-commonjs": "^9.1.4",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-screeps": "^0.1.2",
+    "rollup-plugin-typescript2": "^0.16.1",
+    "tslint": "^5.9.1",
+    "tslint-config-prettier": "^1.14.0",
+    "tslint-plugin-prettier": "^1.3.0",
+    "typescript": "^2.9.2"
   },
   "dependencies": {
-    "google-closure-compiler": "^20161024.3.0",
-    "typedoc": "^0.8.0"
+    "source-map": "~0.6.1"
   }
 }

@@ -11,8 +11,7 @@ export const enum RoleHarvesterState {
 
 function processHarvesting(creep: Creep) {
     const sources = creep.room.find(FIND_SOURCES);
-    creep.memory.pokus = sources[0];
-    creep.harvest(creep.memory.pokus);
+    creep.harvest(sources[0]);
 
     // TODO: Decide where to go (spawn/extension)
     if (creep.carry.energy !== undefined)
@@ -39,8 +38,8 @@ function processMowingToSpawn(creep: Creep) {
 }
 
 function processSupplyingSpawn(creep: Creep) {
-    const targets = creep.room.find<StructureSpawn>(FIND_STRUCTURES, {
-        filter: (structure: StructureSpawn) => {
+    const targets = creep.room.find<StructureSpawn | StructureExtension>(FIND_STRUCTURES, {
+        filter: (structure: StructureSpawn | StructureExtension) => {
             return (structure.structureType === STRUCTURE_EXTENSION
                 || structure.structureType === STRUCTURE_SPAWN) &&
                 structure.energy < structure.energyCapacity;

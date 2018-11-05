@@ -1,5 +1,16 @@
 import * as harvester from "./harvester";
 import * as upgrader from "./upgrader";
+
+function creepInit(creepRole: string): CreepMemory {
+    return { 
+        role: creepRole,
+        state: 0,
+        path: [],
+        targetPos: RoomPosition(0, 0, "asdf"),
+        previousPosition: RoomPosition(0, 0, "asdf"),
+        pathTick: 0
+    };
+}
 // import upgrader = require("./upgrader");
 /**
  * This function is executed *every tick*.
@@ -48,7 +59,7 @@ export function loop()
     if (harvesters.length < 2)
     {
         let newName = Game.spawns["Spawn1"].createCreep([WORK, CARRY, MOVE, MOVE],
-            undefined, {role: "harvester", state: 0});
+            undefined, creepInit("harvester"));
         Game.spawns["Spawn1"].memory.building = true;
         console.log("Spawning new harvester: " + newName);
     }
@@ -58,7 +69,7 @@ export function loop()
     if (upgraders.length < 6 && Game.spawns["Spawn1"].memory.building === false)
     {
         let newName = Game.spawns["Spawn1"].createCreep([WORK, CARRY, MOVE, MOVE],
-            undefined, {role: "upgrader", tate: 0});
+            undefined, creepInit("upgrader"));
         Game.spawns["Spawn1"].memory.building = true;
         console.log("Spawning new upgrader: " + newName);
     }

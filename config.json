@@ -1,7 +1,0 @@
-{
-  "target": {
-    "bundle": true,
-    "lint": true,
-    "lintRequired": true
-  }
-}

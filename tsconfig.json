@@ -1,24 +1,19 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es6",
-    "removeComments": true,
-    "noResolve": false,
-    "noImplicitAny": true,
+    "module": "esnext",
+    "lib": ["esnext"],
+    "target": "es2017",
+    "moduleResolution": "Node",
+    "outDir": "dist",
+    "baseUrl": "src/",
+    "sourceMap": true,
+    "strict": true,
     "experimentalDecorators": true,
-    "strictNullChecks": true,
-    "noUnusedParameters": true,
-    "noUnusedLocals": true,
-    "outDir": "/dev/null"
+    "noImplicitReturns": true,
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false
   },
-  "compileOnSave": false,
-  "include": [
-    "typings/**/*.d.ts",
-    "src/**/*.ts"
-  ],
   "exclude": [
-    "dist",
-    "node_modules",
-    "libs"
+    "node_modules"
   ]
 }

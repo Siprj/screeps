@@ -32,8 +32,7 @@ function processHarvesting(creep: Creep) {
     //    * Use lookAt() function to find out which object are available at the
     //      position and filter out the source,
     //      see: http://support.screeps.com/hc/en-us/articles/203079011-Room#lookAt
-    const sources = <Source[]> creep.room.find(FIND_SOURCES,
-        {filter: { pos: creep.memory.targetPos}});
+    const sources = creep.room.find(FIND_SOURCES);
 
     if (sources.length !== 0)
     {
