@@ -8,9 +8,8 @@ interface CreepMemory {
 }
 
 interface Memory {
-  building: string;
+    creepIdCounter: number
 }
 
 interface SpawnMemory {
-  building: boolean;
 }

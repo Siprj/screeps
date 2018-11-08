@@ -38,7 +38,9 @@ function processHarvesting(creep: Creep) {
     {
         let source = sources[0];
         // TODO: Error handling !!!!!!!
-        creep.harvest(source);
+        console.log("upgrader [" + creep.name + "] is trying to harver");
+        console.log("harverst result: " + creep.harvest(source).toString());
+        console.log(source.pos.toString());
     }
 
     // TODO: Thing about next destination (this may be used done in some another
