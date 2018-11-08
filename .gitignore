@@ -49,3 +49,6 @@ cabal.sandbox.config
 .stack-work/
 cabal.project.local
 .HTF/
+
+# screeps upload
+screeps.json
