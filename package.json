@@ -27,9 +27,5 @@
     "rollup-plugin-typescript2": "^0.25.2",
     "tslint": "^5.20.1",
     "typescript": "^3.7.2"
-  },
-#  "dependencies": {
-#    "node-gyp": "^6.0.1",
-#    "source-map": "~0.6.1"
-#  }
+  }
 }
