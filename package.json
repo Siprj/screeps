@@ -19,18 +19,17 @@
   "homepage": "https://github.com/Siprj/screeps#readme",
   "devDependencies": {
     "@types/lodash": "^3.10.1",
-    "@types/screeps": "^2.5.5",
     "@types/node": "^12.12.7",
     "rollup": "^1.26.3",
     "rollup-plugin-clear": "^2.0.7",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-screeps": "^0.1.2",
     "rollup-plugin-typescript2": "^0.25.2",
     "tslint": "^5.20.1",
     "typescript": "^3.7.2"
   },
-  "dependencies": {
-    "source-map": "~0.6.1"
-  }
+#  "dependencies": {
+#    "node-gyp": "^6.0.1",
+#    "source-map": "~0.6.1"
+#  }
 }
