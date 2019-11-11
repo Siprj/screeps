@@ -31,7 +31,7 @@ export const loop = function ()
     {
         spawUpgrader(mainSpawn);
     }
-    else if (builderCount < 8 && mainSpawn.spawning == null && energyDeficit == 0)
+    else if (builderCount < 2 && mainSpawn.spawning == null && energyDeficit == 0)
     {
         spawBuilder(mainSpawn);
     }
