@@ -45,8 +45,18 @@ export const loop = function ()
     if (controller == null)
         return;
 
-    let extensionCount = _.reduce(Game.structures, (n:number, structure: Structure) => { return structure.structureType == STRUCTURE_EXTENSION ? n + 1: 1 }, 0);
-    if (extensionCount < CONTROLLER_STRUCTURES[STRUCTURE_EXTENSION][controller.level])
+    const extensionCount = _.reduce(Game.structures,
+        ( n:number, structure: Structure) =>
+            { return structure.structureType == STRUCTURE_EXTENSION ? n + 1: 1 }
+        , 0);
+    const extensionCSCount =
+        _.filter(mainSpawn.room.find(FIND_CONSTRUCTION_SITES)
+        , (cs: ConstructionSite) =>
+            { return cs.structureType == STRUCTURE_EXTENSION; }
+        ).length;
+    console.log(extensionCount);
+    console.log(extensionCSCount);
+    if ((extensionCount + extensionCSCount) < CONTROLLER_STRUCTURES[STRUCTURE_EXTENSION][controller.level])
     {
         const spiralN = (mainSpawn.memory.spiralN == null) ? 0 : mainSpawn.memory.spiralN;
         mainSpawn.memory.spiralN = spiralN + 1;

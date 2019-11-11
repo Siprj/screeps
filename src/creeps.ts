@@ -114,8 +114,8 @@ function runHarvester(creep:Creep)
     {
         let filterFunc = (structure: StructureSpawn | StructureExtension) : boolean =>
             {
-                return (structure.structureType == STRUCTURE_EXTENSION 
-                    || structure.structureType == STRUCTURE_SPAWN) 
+                return (structure.structureType == STRUCTURE_EXTENSION
+                    || structure.structureType == STRUCTURE_SPAWN)
                         && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
             }
         let spawnerAndExtensions = creep.room.find(FIND_STRUCTURES, {filter: filterFunc});
