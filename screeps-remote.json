@@ -1,0 +1,14 @@
+{
+    "local": {
+        "baseUrl": "http://localhost",
+        "destinationBranch": "main"
+    },
+    "main": {
+        "baseUrl": "https://screeps.com",
+        "destinationBranch": "main"
+    },
+    "main-dev": {
+        "baseUrl": "https://screeps.com",
+        "destinationBranch": "dev"
+    }
+}
