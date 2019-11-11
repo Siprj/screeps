@@ -1,4 +1,4 @@
-import { runRole, spawHarvester, spawUpgrader} from "creeps";
+import { runRole, spawHarvester, spawUpgrader, spawBuilder} from "creeps";
 import { siralAroundPoint } from "ulam-spiral";
 import { roomPositionToPoint } from "point";
 
@@ -15,16 +15,25 @@ export const loop = function ()
 
     let mainSpawn = Game.spawns["Spawn1"];
     let energyDeficit = mainSpawn.room.energyCapacityAvailable - mainSpawn.room.energyAvailable;
-    let harvesters = _.filter(Game.creeps, (creep: Creep) => {creep.memory.role == "harvester"});
-    let upgraders = _.filter(Game.creeps, (creep: Creep) => {creep.memory.role == "upgrader"});
+    let harvesterCount = _.reduce(Game.creeps, (n: number, creep: Creep) => { return creep.memory.role == "harvester" ? n + 1: n }, 0);
+    let upgraderCount = _.reduce(Game.creeps, (n: number, creep: Creep) => { return creep.memory.role == "upgrader" ? n + 1: n }, 0);
+    let builderCount = _.reduce(Game.creeps, (n: number, creep: Creep) => { return creep.memory.role == "builder" ? n + 1: n }, 0);
 
-    if (harvesters.length < 2 && mainSpawn.spawning == null && energyDeficit == 0)
+    console.log("harvesterCount: " + harvesterCount);
+    console.log("upgraderCount: " + upgraderCount);
+    console.log("builderCount: " + builderCount);
+
+    if (harvesterCount < 3 && mainSpawn.spawning == null && energyDeficit == 0)
     {
         spawHarvester(mainSpawn);
     }
-    else if (upgraders.length < 8 && mainSpawn.spawning == null && energyDeficit == 0)
+    else if (upgraderCount < 8 && mainSpawn.spawning == null && energyDeficit == 0)
     {
         spawUpgrader(mainSpawn);
+    }
+    else if (builderCount < 8 && mainSpawn.spawning == null && energyDeficit == 0)
+    {
+        spawBuilder(mainSpawn);
     }
 
     for (let creep in Game.creeps)
@@ -36,13 +45,9 @@ export const loop = function ()
     if (controller == null)
         return;
 
-    console.log("hm....");
-    let extensions = _.filter(Game.structures, (structure: Structure) => structure.structureType == STRUCTURE_EXTENSION);
-    console.log(extensions.length);
-    console.log(CONTROLLER_STRUCTURES[STRUCTURE_EXTENSION][controller.level]);
-    if (extensions.length < CONTROLLER_STRUCTURES[STRUCTURE_EXTENSION][controller.level])
+    let extensionCount = _.reduce(Game.structures, (n:number, structure: Structure) => { return structure.structureType == STRUCTURE_EXTENSION ? n + 1: 1 }, 0);
+    if (extensionCount < CONTROLLER_STRUCTURES[STRUCTURE_EXTENSION][controller.level])
     {
-        console.log("trying to build extensions");
         const spiralN = (mainSpawn.memory.spiralN == null) ? 0 : mainSpawn.memory.spiralN;
         mainSpawn.memory.spiralN = spiralN + 1;
         const pos = mainSpawn.pos;

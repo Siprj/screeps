@@ -20,9 +20,35 @@ import System.FilePath.Find
 import System.IO
 
 
+data Tokens = Tokens
+    { tokens :: Map String ByteString
+    }
+
+$(deriveJSON defaultOptions ''Tokens)
+
+data Protocol = Http | Https
+
+$(deriveJSON defaultOptions ''Protocol)
+
+
+data ConfigurationBit = ConfigurationBit
+    { protocol :: Protocol
+    , hostName :: String
+    , hostPort :: Int
+    , destinationBranch :: String
+    }
+
+$(deriveJSON defaultOptions ''ConfigurationBit)
+
+data Configuration = Configuration (Map String ConfigurationBit)
+
+$(deriveJSON defaultOptions ''Configuration)
+
+
 -- Configuration
 artefactDirectory = "dist"
 dstBranch = "default"
+
 
 main :: IO ()
 main = do

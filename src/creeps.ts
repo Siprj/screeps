@@ -32,6 +32,15 @@ export function spawUpgrader(spawn: StructureSpawn)
     spawn.spawnCreep(body, "up" + creepId, {memory: createUpgraderMemory(source[0].id)});
 }
 
+export function spawBuilder(spawn: StructureSpawn)
+{
+    const body = getHarvesterBodyParts(spawn.room.energyAvailable);
+    let creepId = spawn.memory.spawnCount++;
+
+    const source: Source[] = spawn.room.find<FIND_SOURCES>(FIND_SOURCES);
+    spawn.spawnCreep(body, "bu" + creepId, {memory: createBuilderMemory(source[0].id)});
+}
+
 function createHarvesterMemory(sourceId: string): CreepMemory
 {
     return {
@@ -45,6 +54,15 @@ function createUpgraderMemory(sourceId: string): CreepMemory
 {
     return {
           role: "upgrader"
+        , working: false
+        , designatedSource : sourceId
+        };
+}
+
+function createBuilderMemory(sourceId: string): CreepMemory
+{
+    return {
+          role: "builder"
         , working: false
         , designatedSource : sourceId
         };
@@ -173,9 +191,50 @@ function runUpgrader(creep:Creep)
     }
 }
 
+function runBuilder(creep:Creep)
+{
+    if (creep.memory.working)
+    {
+        if (creep.carry.energy == 0)
+            creep.memory.working = false;
+    }
+    else
+    {
+        if (creep.carry.energy == creep.carryCapacity)
+            creep.memory.working = true;
+    }
+
+    if (creep.memory.working)
+    {
+        const constructionSites: ConstructionSite[] = creep.room.find(FIND_CONSTRUCTION_SITES);
+        if (constructionSites.length > 0)
+        {
+            if (creep.build(constructionSites[0]) == ERR_NOT_IN_RANGE)
+                creep.moveTo(constructionSites[0]);
+        }
+    }
+    else
+    {
+        let source = Game.getObjectById<Source>(creep.memory.designatedSource);
+
+        if (source == null)
+        {
+            console.log("ERROR can't find deisgnated source for creep: " + creep.name);
+            return;
+        }
+
+        if (source.energy == 0 && creep.carry.energy == 0)
+            creep.memory.working = true;
+
+        if (creep.harvest(source) != OK)
+            creep.moveTo(source);
+    }
+}
+
 const creepRoles:{ [creepName: string]: (creep: Creep) => void } = {
     "harvester": runHarvester,
-    "upgrader": runUpgrader
+    "upgrader": runUpgrader,
+    "builder": runBuilder
 }
 
 export function runRole(creep: Creep)
