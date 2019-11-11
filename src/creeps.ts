@@ -16,26 +16,20 @@ function addBodyPartIfPossible
 
 export function spawHarvester(spawn: StructureSpawn)
 {
-    console.log("try to spawn harvester");
     const body = getHarvesterBodyParts(spawn.room.energyAvailable);
     let creepId = spawn.memory.spawnCount++;
 
     const source: Source[] = spawn.room.find<FIND_SOURCES>(FIND_SOURCES);
-    const ret = spawn.spawnCreep(body, "hv" + creepId, {memory: createHarvesterMemory(source[0].id)});
-    console.log("spawnig result: ", ret);
-
+    spawn.spawnCreep(body, "hv" + creepId, {memory: createHarvesterMemory(source[0].id)});
 }
 
 export function spawUpgrader(spawn: StructureSpawn)
 {
-    console.log("try to spawn upgrader");
     const body = getHarvesterBodyParts(spawn.room.energyAvailable);
     let creepId = spawn.memory.spawnCount++;
 
     const source: Source[] = spawn.room.find<FIND_SOURCES>(FIND_SOURCES);
-    const ret = spawn.spawnCreep(body, "up" + creepId, {memory: createUpgraderMemory(source[0].id)});
-    console.log("spawnig result: ", ret);
-
+    spawn.spawnCreep(body, "up" + creepId, {memory: createUpgraderMemory(source[0].id)});
 }
 
 function createHarvesterMemory(sourceId: string): CreepMemory
@@ -87,7 +81,6 @@ export function getHarvesterBodyParts(availableEnergy: number): BodyPartConstant
 
 function runHarvester(creep:Creep)
 {
-    console.log("Running Harvensing role.");
     if (creep.memory.working)
     {
         if (creep.carry.energy == 0)
@@ -101,7 +94,6 @@ function runHarvester(creep:Creep)
 
     if (creep.memory.working)
     {
-        console.log("Harvester is working.");
         let filterFunc = (structure: StructureSpawn | StructureExtension) : boolean =>
             {
                 return (structure.structureType == STRUCTURE_EXTENSION 
@@ -113,7 +105,6 @@ function runHarvester(creep:Creep)
         {
             // TODO: Maybe move the creep somewhere
             //  or do some upgrading...
-            console.log("No structure to fill!");
             return;
         }
         if (creep.transfer(spawnerAndExtensions[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
@@ -141,7 +132,6 @@ function runHarvester(creep:Creep)
 
 function runUpgrader(creep:Creep)
 {
-    console.log("Running Upgrader role.");
     if (creep.memory.working)
     {
         if (creep.carry.energy == 0)
@@ -160,7 +150,6 @@ function runUpgrader(creep:Creep)
             console.log("ERROR: No controller was found!!!");
             return;
         }
-
         if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE)
         {
             creep.moveTo(creep.room.controller);

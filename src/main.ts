@@ -1,4 +1,6 @@
 import { runRole, spawHarvester, spawUpgrader} from "creeps";
+import { siralAroundPoint } from "ulam-spiral";
+import { roomPositionToPoint } from "point";
 
 export const loop = function ()
 {
@@ -16,17 +18,35 @@ export const loop = function ()
     let harvesters = _.filter(Game.creeps, (creep: Creep) => {creep.memory.role == "harvester"});
     let upgraders = _.filter(Game.creeps, (creep: Creep) => {creep.memory.role == "upgrader"});
 
-    if (upgraders.length < 8 && mainSpawn.spawning == null && energyDeficit == 0)
-    {
-        spawUpgrader(mainSpawn);
-    }
-    else if (harvesters.length < 2 && mainSpawn.spawning == null && energyDeficit == 0)
+    if (harvesters.length < 2 && mainSpawn.spawning == null && energyDeficit == 0)
     {
         spawHarvester(mainSpawn);
+    }
+    else if (upgraders.length < 8 && mainSpawn.spawning == null && energyDeficit == 0)
+    {
+        spawUpgrader(mainSpawn);
     }
 
     for (let creep in Game.creeps)
     {
         runRole(Game.creeps[creep]);
+    }
+
+    let controller = mainSpawn.room.controller;
+    if (controller == null)
+        return;
+
+    console.log("hm....");
+    let extensions = _.filter(Game.structures, (structure: Structure) => structure.structureType == STRUCTURE_EXTENSION);
+    console.log(extensions.length);
+    console.log(CONTROLLER_STRUCTURES[STRUCTURE_EXTENSION][controller.level]);
+    if (extensions.length < CONTROLLER_STRUCTURES[STRUCTURE_EXTENSION][controller.level])
+    {
+        console.log("trying to build extensions");
+        const spiralN = (mainSpawn.memory.spiralN == null) ? 0 : mainSpawn.memory.spiralN;
+        mainSpawn.memory.spiralN = spiralN + 1;
+        const pos = mainSpawn.pos;
+        const point = siralAroundPoint(spiralN, roomPositionToPoint(pos));
+        controller.room.createConstructionSite(point.x, point.y, STRUCTURE_EXTENSION);
     }
 }

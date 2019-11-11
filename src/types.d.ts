@@ -9,5 +9,6 @@ interface CreepMemory {
 
 // memory extension samples
 interface SpawnMemory {
-    spawnCount: number
+    spawnCount: number,
+    spiralN: number
 }
