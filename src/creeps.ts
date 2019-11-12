@@ -59,11 +59,17 @@ function createUpgraderMemory(sourceId: string): CreepMemory
         };
 }
 
+enum WorkAction {
+    Building,
+    Repairing
+}
+
 function createBuilderMemory(sourceId: string): CreepMemory
 {
     return {
           role: "builder"
         , working: false
+        , workAction: Building
         , designatedSource : sourceId
         };
 }
@@ -191,7 +197,34 @@ function runUpgrader(creep:Creep)
     }
 }
 
-function runBuilder(creep:Creep)
+function getDemagedStructures(const creep: Creep): Structure[]
+{
+    let demagedStructures = _.filter(creep.room.find(FIND_STRUCTURES)
+        , (structure: Structure) => {
+            return structure.hits < structure.hitsMax;
+        });
+    demagedStructures.sort((a,b) => a.hits - b.hits);
+    return demagedStructures;
+}
+
+function doBuilderAction(const creep: Creep, targetStructure: Structure)
+{
+    switch(creep.memory.workAction)
+    {
+        case Building: {
+            break;
+        }
+        case Repairing: {
+            break;
+        }
+        default: {
+            return
+            break;
+        }
+    }
+}
+
+function runBuilder(creep: Creep)
 {
     if (creep.memory.working)
     {
@@ -211,6 +244,16 @@ function runBuilder(creep:Creep)
         {
             if (creep.build(constructionSites[0]) == ERR_NOT_IN_RANGE)
                 creep.moveTo(constructionSites[0]);
+        }
+        else
+        {
+            const demagedStructures = getDemagedStructures(creep);
+            if (demagedStructures.length > 0)
+            {
+                if (creep.repair(demagedStructures[0]) == ERR_NOT_IN_RANGE)
+                    creep.moveTo(demagedStructures[0]);
+
+            }
         }
     }
     else

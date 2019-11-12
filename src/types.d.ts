@@ -4,6 +4,7 @@
 interface CreepMemory {
   role: string;
   working: boolean;
+  workAction: number;
   designatedSource: string;
 }
 
