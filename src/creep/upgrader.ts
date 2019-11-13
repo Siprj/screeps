@@ -3,10 +3,16 @@ function createUpgraderMemory(sourceId: string): CreepMemory
 {
     return {
           role: "upgrader"
-        , working: false
-        , designatedSource : sourceId
-        , roleMemory: {}
+        , roleMemory: {
+             working: false
+            , designatedSource : sourceId
+            }
         };
+}
+
+function getUpgraderMemory(creep: Creep): UpgraderMemory
+{
+    return creep.memory.roleMemory as UpgraderMemory;
 }
 
 function addBodyPartIfPossible
@@ -64,18 +70,19 @@ export function spawnUpgrader(spawn: StructureSpawn)
 
 export function runUpgrader(creep:Creep)
 {
-    if (creep.memory.working)
+    let upgraderMemory = getUpgraderMemory(creep);
+    if (upgraderMemory.working)
     {
         if (creep.carry.energy == 0)
-            creep.memory.working = false;
+            upgraderMemory.working = false;
     }
     else
     {
         if (creep.carry.energy == creep.carryCapacity)
-            creep.memory.working = true;
+            upgraderMemory.working = true;
     }
 
-    if (creep.memory.working)
+    if (upgraderMemory.working)
     {
         if (creep.room.controller == null)
         {
@@ -89,7 +96,7 @@ export function runUpgrader(creep:Creep)
     }
     else
     {
-        let source = Game.getObjectById<Source>(creep.memory.designatedSource);
+        let source = Game.getObjectById<Source>(upgraderMemory.designatedSource);
 
         if (source == null)
         {
@@ -98,7 +105,7 @@ export function runUpgrader(creep:Creep)
         }
 
         if (source.energy == 0 && creep.carry.energy == 0)
-            creep.memory.working = true;
+            upgraderMemory.working = true;
 
         if (creep.harvest(source) != OK)
             creep.moveTo(source);

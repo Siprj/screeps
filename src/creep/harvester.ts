@@ -1,7 +1,3 @@
-interface HarvesterMemory {
-      working: boolean
-    , designatedSource: string
-    }
 
 function addBodyPartIfPossible
     ( availableEnergy: number
@@ -18,12 +14,17 @@ function addBodyPartIfPossible
     return availableEnergy;
 }
 
+function getHarveterMemory (creep: Creep): HarvesterMemory
+{
+    return creep.memory.roleMemory as HarvesterMemory;
+}
+
 function createHarvesterMemory(sourceId: string): CreepMemory
 {
     return {
           role: "harvester"
         , roleMemory: {
-            , working: false
+              working: false
             , designatedSource : sourceId
             }
         };
@@ -69,33 +70,38 @@ export function spawnHarvester(spawn: StructureSpawn)
 
 export function runHarvester(creep:Creep)
 {
-    if (creep.memory.working)
+    if (getHarveterMemory(creep).working)
     {
         if (creep.carry.energy == 0)
-            creep.memory.working = false;
+            getHarveterMemory(creep).working = false;
     }
     else
     {
         if (creep.carry.energy == creep.carryCapacity)
-            creep.memory.working = true;
+            getHarveterMemory(creep).working = true;
     }
 
-    if (creep.memory.working)
+    if (getHarveterMemory(creep).working)
     {
-        let filterFunc = (structure: StructureSpawn | StructureExtension | StructureStorage) : boolean =>
+        type StorageStructures = StructureSpawn | StructureExtension | StructureStorage;
+        let filterFunc = (structure: StorageStructures) : boolean =>
             {
                 return (structure.structureType == STRUCTURE_EXTENSION
                     || structure.structureType == STRUCTURE_SPAWN
                     || structure.structureType == STRUCTURE_STORAGE)
                         && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
             }
-        let spawnerAndExtensions = creep.room.find(FIND_STRUCTURES, {filter: filterFunc});
+        let spawnerAndExtensions = creep.room.find<StorageStructures>(FIND_STRUCTURES, {filter: filterFunc})
+            .sort((s1: StorageStructures, s2: StorageStructures) : number => {
+                return s1.store.getFreeCapacity(RESOURCE_ENERGY) - s2.store.getFreeCapacity(RESOURCE_ENERGY);
+            });
         if (spawnerAndExtensions.length == 0)
         {
             // TODO: Maybe move the creep somewhere
             //  or do some upgrading...
             return;
         }
+        console.log(spawnerAndExtensions[0].id);
         if (creep.transfer(spawnerAndExtensions[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
         {
             creep.moveTo(spawnerAndExtensions[0]);
@@ -103,7 +109,7 @@ export function runHarvester(creep:Creep)
     }
     else
     {
-        let source = Game.getObjectById<Source>(creep.memory.designatedSource);
+        let source = Game.getObjectById<Source>(getHarveterMemory(creep).designatedSource);
 
         if (source == null)
         {
@@ -112,7 +118,7 @@ export function runHarvester(creep:Creep)
         }
 
         if (source.energy == 0 && creep.carry.energy == 0)
-            creep.memory.working = true;
+            getHarveterMemory(creep).working = true;
 
         if (creep.harvest(source) != OK)
             creep.moveTo(source);

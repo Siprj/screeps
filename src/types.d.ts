@@ -1,20 +1,29 @@
 // example declaration file - remove these and add your own custom typings
 
-interface WorkerMemory {}
-interface BuilderMemory {}
-interface HarvesterMemory {}
-
-interface CreepMemory
+interface UpgraderMemory
 {
-  role: string;
-  roleMemory: WorkerMemory | BuilderMemory | HarvesterMemory;
+    working: boolean;
+    designatedSource: string;
+}
+
+interface HarvesterMemory
+{
+    working: boolean;
+    designatedSource: string;
 }
 
 interface BuilderMemory
 {
+    working: boolean;
+    sourceId: string;
+    targetId: string;
+}
+
+
+interface CreepMemory
+{
   role: string;
-  working: boolean;
-  workAction: number;
+  roleMemory: HarvesterMemory | UpgraderMemory | BuilderMemory;
 }
 
 interface SpawnMemory

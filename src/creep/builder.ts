@@ -1,11 +1,4 @@
 
-interface BuilderMemory
-{
-    working: boolean;
-    sourceId: string;
-    targetId: string;
-}
-
 function addBodyPartIfPossible
     ( availableEnergy: number
     , bodyPart: BodyPartConstant
@@ -19,6 +12,11 @@ function addBodyPartIfPossible
         return availableEnergy - bodyPartCost;
     }
     return availableEnergy;
+}
+
+function getBuilderMemory(creep: Creep): BuilderMemory
+{
+    return creep.memory.roleMemory as BuilderMemory;
 }
 
 export function spawnBuilder(spawn: StructureSpawn)
@@ -83,18 +81,20 @@ function getDemagedStructures(creep: Creep): Structure[]
 
 export function runBuilder(creep: Creep)
 {
-    if (creep.memory.working)
+    let builderMemory = getBuilderMemory(creep);
+
+    if (builderMemory.working)
     {
         if (creep.carry.energy == 0)
-            creep.memory.working = false;
+            builderMemory.working = false;
     }
     else
     {
         if (creep.carry.energy == creep.carryCapacity)
-            creep.memory.working = true;
+            builderMemory.working = true;
     }
 
-    if (creep.memory.working)
+    if (builderMemory.working)
     {
         const constructionSites: ConstructionSite[] = creep.room.find(FIND_CONSTRUCTION_SITES);
         if (constructionSites.length > 0)
@@ -115,7 +115,7 @@ export function runBuilder(creep: Creep)
     }
     else
     {
-        let source = Game.getObjectById<Source>(creep.memory.designatedSource);
+        let source = Game.getObjectById<Source>(builderMemory.sourceId);
 
         if (source == null)
         {
@@ -124,7 +124,7 @@ export function runBuilder(creep: Creep)
         }
 
         if (source.energy == 0 && creep.carry.energy == 0)
-            creep.memory.working = true;
+            builderMemory.working = true;
 
         if (creep.harvest(source) != OK)
             creep.moveTo(source);
