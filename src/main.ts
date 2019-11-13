@@ -1,4 +1,4 @@
-import { runRole, spawHarvester, spawUpgrader, spawBuilder} from "creeps";
+import { runRole, spawnHarvester, spawnUpgrader, spawnBuilder} from "creeps";
 import { siralAroundPoint } from "ulam-spiral";
 import { roomPositionToPoint } from "point";
 
@@ -23,17 +23,17 @@ export const loop = function ()
     console.log("upgraderCount: " + upgraderCount);
     console.log("builderCount: " + builderCount);
 
-    if (harvesterCount < 3 && mainSpawn.spawning == null && energyDeficit == 0)
+    if (harvesterCount < 2 && mainSpawn.spawning == null && energyDeficit == 0)
     {
-        spawHarvester(mainSpawn);
+        spawnHarvester(mainSpawn);
     }
-    else if (upgraderCount < 8 && mainSpawn.spawning == null && energyDeficit == 0)
+    else if (upgraderCount < 2 && mainSpawn.spawning == null && energyDeficit == 0)
     {
-        spawUpgrader(mainSpawn);
+        spawnUpgrader(mainSpawn);
     }
-    else if (builderCount < 2 && mainSpawn.spawning == null && energyDeficit == 0)
+    else if (builderCount < 1 && mainSpawn.spawning == null && energyDeficit == 0)
     {
-        spawBuilder(mainSpawn);
+        spawnBuilder(mainSpawn);
     }
 
     for (let creep in Game.creeps)
