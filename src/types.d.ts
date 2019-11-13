@@ -2,13 +2,12 @@
 
 interface WorkerMemory {}
 interface BuilderMemory {}
+interface HarvesterMemory {}
 
 interface CreepMemory
 {
   role: string;
-  working: boolean;
-  designatedSource: string;
-  roleMemory: WorkerMemory | BuilderMemory;
+  roleMemory: WorkerMemory | BuilderMemory | HarvesterMemory;
 }
 
 interface BuilderMemory
@@ -18,7 +17,8 @@ interface BuilderMemory
   workAction: number;
 }
 
-interface SpawnMemory {
+interface SpawnMemory
+{
     spawnCount: number,
     spiralN: number
 }

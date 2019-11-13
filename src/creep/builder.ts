@@ -1,3 +1,11 @@
+
+interface BuilderMemory
+{
+    working: boolean;
+    sourceId: string;
+    targetId: string;
+}
+
 function addBodyPartIfPossible
     ( availableEnergy: number
     , bodyPart: BodyPartConstant
@@ -26,9 +34,11 @@ function createBuilderMemory(sourceId: string): CreepMemory
 {
     return {
           role: "builder"
-        , working: false
-        , designatedSource : sourceId
-        , roleMemory: {}
+        , roleMemory: {
+              working: false
+            , sourceId: sourceId
+            , targetId: ""
+            }
         };
 }
 

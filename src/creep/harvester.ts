@@ -1,3 +1,8 @@
+interface HarvesterMemory {
+      working: boolean
+    , designatedSource: string
+    }
+
 function addBodyPartIfPossible
     ( availableEnergy: number
     , bodyPart: BodyPartConstant
@@ -17,9 +22,10 @@ function createHarvesterMemory(sourceId: string): CreepMemory
 {
     return {
           role: "harvester"
-        , working: false
-        , designatedSource : sourceId
-        , roleMemory: {}
+        , roleMemory: {
+            , working: false
+            , designatedSource : sourceId
+            }
         };
 }
 
