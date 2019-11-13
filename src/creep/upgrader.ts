@@ -4,8 +4,8 @@ function createUpgraderMemory(sourceId: string): CreepMemory
     return {
           role: "upgrader"
         , roleMemory: {
-             working: false
-            , designatedSource : sourceId
+              sourceId
+            , working: false
             }
         };
 }
@@ -35,11 +35,10 @@ function getHarvesterBodyParts(availableEnergy: number): BodyPartConstant[]
 
     const harvesterBase: BodyPartConstant[] = [MOVE, MOVE, WORK, CARRY, CARRY];
     const harvesterBasePrice: number = 300;
-    const n = _.floor(availableEnergy/harvesterBasePrice);
+    const n = _.floor(availableEnergy / harvesterBasePrice);
 
-
-    let body: BodyPartConstant[] = _.flatten(_.times(n, _.constant(harvesterBase)));
-    let remainingEnergy = availableEnergy - (harvesterBasePrice * n)
+    const body: BodyPartConstant[] = _.flatten(_.times(n, _.constant(harvesterBase)));
+    let remainingEnergy = availableEnergy - (harvesterBasePrice * n);
 
     while (remainingEnergy > 0)
     {
@@ -62,24 +61,28 @@ function getHarvesterBodyParts(availableEnergy: number): BodyPartConstant[]
 export function spawnUpgrader(spawn: StructureSpawn)
 {
     const body = getHarvesterBodyParts(spawn.room.energyAvailable);
-    let creepId = spawn.memory.spawnCount++;
+    const creepId = spawn.memory.spawnCount++;
 
     const source: Source[] = spawn.room.find<FIND_SOURCES>(FIND_SOURCES);
     spawn.spawnCreep(body, "up" + creepId, {memory: createUpgraderMemory(source[0].id)});
 }
 
-export function runUpgrader(creep:Creep)
+export function runUpgrader(creep: Creep)
 {
-    let upgraderMemory = getUpgraderMemory(creep);
+    const upgraderMemory = getUpgraderMemory(creep);
     if (upgraderMemory.working)
     {
-        if (creep.carry.energy == 0)
+        if (creep.carry.energy === 0)
+        {
             upgraderMemory.working = false;
+        }
     }
     else
     {
-        if (creep.carry.energy == creep.carryCapacity)
+        if (creep.carry.energy === creep.carryCapacity)
+        {
             upgraderMemory.working = true;
+        }
     }
 
     if (upgraderMemory.working)
@@ -89,14 +92,14 @@ export function runUpgrader(creep:Creep)
             console.log("ERROR: No controller was found!!!");
             return;
         }
-        if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE)
+        if (creep.upgradeController(creep.room.controller) === ERR_NOT_IN_RANGE)
         {
             creep.moveTo(creep.room.controller);
         }
     }
     else
     {
-        let source = Game.getObjectById<Source>(upgraderMemory.designatedSource);
+        const source = Game.getObjectById<Source>(upgraderMemory.sourceId);
 
         if (source == null)
         {
@@ -104,11 +107,14 @@ export function runUpgrader(creep:Creep)
             return;
         }
 
-        if (source.energy == 0 && creep.carry.energy == 0)
+        if (source.energy === 0 && creep.carry.energy === 0)
+        {
             upgraderMemory.working = true;
+        }
 
-        if (creep.harvest(source) != OK)
+        if (creep.harvest(source) !== OK)
+        {
             creep.moveTo(source);
+        }
     }
 }
-

@@ -1,24 +1,23 @@
-import { spawnHarvester, runHarvester } from "creep/harvester"
-import { spawnUpgrader, runUpgrader } from "creep/upgrader"
-import { spawnBuilder, runBuilder } from "creep/builder"
+import { runBuilder, spawnBuilder } from "creep/builder";
+import { runHarvester, spawnHarvester  } from "creep/harvester";
+import { runUpgrader, spawnUpgrader } from "creep/upgrader";
 
 export { spawnHarvester, spawnUpgrader, spawnBuilder };
 
-const creepRoles:{ [creepName: string]: (creep: Creep) => void } = {
-    "harvester": runHarvester,
-    "upgrader": runUpgrader,
-    "builder": runBuilder
-}
+const creepRoles: { [creepName: string]: (creep: Creep) => void } = {
+    builder: runBuilder,
+    harvester: runHarvester,
+    upgrader: runUpgrader
+};
 
 export function runRole(creep: Creep)
 {
-    let f = creepRoles[creep.memory.role];
-    if (f == null)
+    const f = creepRoles[creep.memory.role];
+    if (f === null)
     {
-        console.log("ERROR role: " + creep.memory.role + " is unknowen!!!")
+        console.log("ERROR role: " + creep.memory.role + " is unknowen!!!");
         return;
     }
 
     f(creep);
 }
-

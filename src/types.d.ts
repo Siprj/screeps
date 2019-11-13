@@ -3,13 +3,13 @@
 interface UpgraderMemory
 {
     working: boolean;
-    designatedSource: string;
+    sourceId: string;
 }
 
 interface HarvesterMemory
 {
     working: boolean;
-    designatedSource: string;
+    sourceId: string;
 }
 
 interface BuilderMemory
@@ -19,7 +19,6 @@ interface BuilderMemory
     targetId: string;
 }
 
-
 interface CreepMemory
 {
   role: string;
@@ -28,6 +27,6 @@ interface CreepMemory
 
 interface SpawnMemory
 {
-    spawnCount: number,
-    spiralN: number
+    spawnCount: number;
+    spiralN: number;
 }

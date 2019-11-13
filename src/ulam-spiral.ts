@@ -2,9 +2,9 @@
 
 import {Point} from "./point";
 
-export function siralAroundPoint (n: number, spawnPos: Point): Point
+export function siralAroundPoint(n: number, spawnPos: Point): Point
 {
-    let pos = spiral((n * 2) + 1);
+    const pos = spiral((n * 2) + 1);
     pos.x += spawnPos.x;
     pos.y += spawnPos.y;
     return pos;
@@ -17,20 +17,20 @@ export function spiral(n: number): Point
     // a the position on the current square
     // n = p + a
 
-    let r = Math.floor((Math.sqrt(n + 1) - 1) / 2) + 1;
+    const r = Math.floor((Math.sqrt(n + 1) - 1) / 2) + 1;
 
     // compute radius : inverse arithmetic sum of 8+16+24+...=
-    let p = (8 * r * (r - 1)) / 2;
+    const p = (8 * r * (r - 1)) / 2;
     // compute total point on radius -1 : arithmetic sum of 8+16+24+...
 
-    let en = r * 2;
+    const en = r * 2;
     // points by face
 
-    let a = (1 + n - p) % (r * 8);
+    const a = (1 + n - p) % (r * 8);
     // compute de position and shift it so the first is (-r,-r) but (-r+1,-r)
     // so square can connect
 
-    let pos = new Point();
+    const pos = new Point();
     switch (Math.floor(a / (r * 2)))
     {
         // find the face : 0 top, 1 right, 2, bottom, 3 left
@@ -64,4 +64,3 @@ export function spiral(n: number): Point
     }
     return pos;
 }
-

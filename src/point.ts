@@ -4,10 +4,9 @@ export class Point {
 }
 
 export function roomPositionToPoint(roomPos: RoomPosition): Point
-{ 
-    let point = new Point();
+{
+    const point = new Point();
     point.x = roomPos.x;
     point.y = roomPos.y;
     return point;
 }
-
