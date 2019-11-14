@@ -86,11 +86,12 @@ export function runHarvester(creep: Creep)
 
     if (getHarveterMemory(creep).working)
     {
-        type StorageStructures = StructureSpawn | StructureExtension | StructureStorage;
+        type StorageStructures = StructureSpawn | StructureExtension | StructureStorage | StructureTower;
         const filterFunc = (structure: StorageStructures) : boolean =>
             {
                 return (structure.structureType === STRUCTURE_EXTENSION
                     || structure.structureType === STRUCTURE_SPAWN
+                    || structure.structureType === STRUCTURE_TOWER
                     || structure.structureType === STRUCTURE_STORAGE)
                         && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
             };

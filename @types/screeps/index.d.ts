@@ -4571,6 +4571,11 @@ interface StructureTower extends OwnedStructure<STRUCTURE_TOWER> {
      * @param target The target structure.
      */
     repair(target: Structure): ScreepsReturnCode;
+
+    /**
+     * An object with the storage contents.
+     */
+    store: StoreDefinition;
 }
 
 interface StructureTowerConstructor extends _Constructor<StructureTower>, _ConstructorById<StructureTower> {}
