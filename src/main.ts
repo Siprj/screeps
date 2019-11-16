@@ -52,7 +52,7 @@ export const loop = () =>
 
     const extensionCount = _.reduce(Game.structures,
         ( n: number, structure: Structure) =>
-            structure.structureType === STRUCTURE_EXTENSION ? n + 1 : 1
+            structure.structureType === STRUCTURE_EXTENSION ? n + 1 : n
         , 0);
     const extensionCSCount =
         _.filter(mainSpawn.room.find(FIND_CONSTRUCTION_SITES)
