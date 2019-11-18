@@ -49,13 +49,13 @@ export const loop = () =>
         controller.room.createConstructionSite(point.x, point.y, STRUCTURE_EXTENSION);
     }
 
-    const towers: Array<StructureTower> = _.filter(mainSpawn.room.find<StructureTower>(FIND_MY_STRUCTURES),
+    const towers: StructureTower[] = _.filter(mainSpawn.room.find<StructureTower>(FIND_MY_STRUCTURES),
             (structure: Structure) =>
             structure.structureType === STRUCTURE_TOWER
         );
     if (towers.length > 0)
     {
-        const hostileCreeps: Array<AnyCreep> = mainSpawn.room.find(FIND_HOSTILE_CREEPS);
+        const hostileCreeps: AnyCreep[] = mainSpawn.room.find(FIND_HOSTILE_CREEPS);
         for (const tower of towers)
         {
             if (hostileCreeps.length > 0)
