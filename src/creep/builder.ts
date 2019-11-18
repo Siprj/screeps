@@ -19,13 +19,12 @@ function getBuilderMemory(creep: Creep): BuilderMemory
     return creep.memory.roleMemory as BuilderMemory;
 }
 
-export function spawnBuilder(spawn: StructureSpawn)
+export function spawnBuilder(spawn: StructureSpawn, source: Source)
 {
     const body = getHarvesterBodyParts(spawn.room.energyAvailable);
     const creepId = spawn.memory.spawnCount++;
 
-    const source: Source[] = spawn.room.find<FIND_SOURCES>(FIND_SOURCES);
-    spawn.spawnCreep(body, "bu" + creepId, {memory: createBuilderMemory(source[0].id)});
+    spawn.spawnCreep(body, "bu" + creepId, {memory: createBuilderMemory(source.id)});
 }
 
 function createBuilderMemory(sourceId: string): CreepMemory
@@ -99,24 +98,24 @@ export function runBuilder(creep: Creep)
 
     if (builderMemory.working)
     {
-        const constructionSites: ConstructionSite[] = creep.room.find(FIND_CONSTRUCTION_SITES);
-        if (constructionSites.length > 0)
+        const demagedStructures = getDemagedStructures(creep);
+        if (demagedStructures.length > 0)
         {
-            if (creep.build(constructionSites[0]) === ERR_NOT_IN_RANGE)
+            if (creep.repair(demagedStructures[0]) === ERR_NOT_IN_RANGE)
             {
-                creep.moveTo(constructionSites[0]);
+                creep.moveTo(demagedStructures[0]);
             }
+
         }
         else
         {
-            const demagedStructures = getDemagedStructures(creep);
-            if (demagedStructures.length > 0)
+            const constructionSites: ConstructionSite[] = creep.room.find(FIND_CONSTRUCTION_SITES);
+            if (constructionSites.length > 0)
             {
-                if (creep.repair(demagedStructures[0]) === ERR_NOT_IN_RANGE)
+                if (creep.build(constructionSites[0]) === ERR_NOT_IN_RANGE)
                 {
-                    creep.moveTo(demagedStructures[0]);
+                    creep.moveTo(constructionSites[0]);
                 }
-
             }
         }
     }

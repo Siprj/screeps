@@ -58,13 +58,12 @@ function getHarvesterBodyParts(availableEnergy: number): BodyPartConstant[]
     return body;
 }
 
-export function spawnUpgrader(spawn: StructureSpawn)
+export function spawnUpgrader(spawn: StructureSpawn, source: Source)
 {
     const body = getHarvesterBodyParts(spawn.room.energyAvailable);
     const creepId = spawn.memory.spawnCount++;
 
-    const source: Source[] = spawn.room.find<FIND_SOURCES>(FIND_SOURCES);
-    spawn.spawnCreep(body, "up" + creepId, {memory: createUpgraderMemory(source[0].id)});
+    spawn.spawnCreep(body, "up" + creepId, {memory: createUpgraderMemory(source.id)});
 }
 
 export function runUpgrader(creep: Creep)

@@ -1,5 +1,3 @@
-// example declaration file - remove these and add your own custom typings
-
 interface UpgraderMemory
 {
     working: boolean;
@@ -29,4 +27,13 @@ interface SpawnMemory
 {
     spawnCount: number;
     spiralN: number;
+}
+
+interface RoomMemory
+{
+    harvesterCount: number;
+    builderCount: number;
+    upgraderCount: number;
+    sourceCreepCount: {[sourceId: string]: number};
+    sourceCreepRatio: {[sourceId: string]: number};
 }

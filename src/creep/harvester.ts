@@ -58,13 +58,12 @@ function getHarvesterBodyParts(availableEnergy: number): BodyPartConstant[]
     return body;
 }
 
-export function spawnHarvester(spawn: StructureSpawn)
+export function spawnHarvester(spawn: StructureSpawn, source: Source)
 {
     const body = getHarvesterBodyParts(spawn.room.energyAvailable);
     const creepId = spawn.memory.spawnCount++;
 
-    const source: Source[] = spawn.room.find<FIND_SOURCES>(FIND_SOURCES);
-    spawn.spawnCreep(body, "hv" + creepId, {memory: createHarvesterMemory(source[0].id)});
+    spawn.spawnCreep(body, "hv" + creepId, {memory: createHarvesterMemory(source.id)});
 }
 
 export function runHarvester(creep: Creep)
