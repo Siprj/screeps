@@ -67,14 +67,24 @@ function getHarvesterBodyParts(availableEnergy: number): BodyPartConstant[]
     return body;
 }
 
-function getDemagedStructures(creep: Creep): Structure[]
+function getDemagedStructure(creep: Creep): Structure | null
 {
-    const demagedStructures = _.filter(creep.room.find(FIND_STRUCTURES)
-        , (structure: Structure) => {
+    // TODO: this here.. is not exactly effective...
+    const constructionSites: ConstructionSite[] = creep.room.find(FIND_MY_CONSTRUCTION_SITES);
+    const filterF = (structure: Structure): boolean =>
+    {
+        if (constructionSites.length === 0)
+        {
             return structure.hits < structure.hitsMax;
-        });
-    demagedStructures.sort((a, b) => a.hits - b.hits);
-    return demagedStructures;
+        }
+        else
+        {
+            return structure.structureType === STRUCTURE_RAMPART
+                ? (structure.hits < 10000)
+                : structure.hits < structure.hitsMax;
+        }
+    };
+    return creep.pos.findClosestByRange(FIND_STRUCTURES, { filter: filterF });
 }
 
 export function runBuilder(creep: Creep)
@@ -98,12 +108,12 @@ export function runBuilder(creep: Creep)
 
     if (builderMemory.working)
     {
-        const demagedStructures = getDemagedStructures(creep);
-        if (demagedStructures.length > 0)
+        const demagedStructure = getDemagedStructure(creep);
+        if (demagedStructure)
         {
-            if (creep.repair(demagedStructures[0]) === ERR_NOT_IN_RANGE)
+            if (creep.repair(demagedStructure) === ERR_NOT_IN_RANGE)
             {
-                creep.moveTo(demagedStructures[0]);
+                creep.moveTo(demagedStructure);
             }
 
         }

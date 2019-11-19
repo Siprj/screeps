@@ -56,11 +56,18 @@ export const loop = () =>
     if (towers.length > 0)
     {
         const hostileCreeps: AnyCreep[] = mainSpawn.room.find(FIND_HOSTILE_CREEPS);
+        const demagedStructures: Structure[] = mainSpawn.room.find(FIND_STRUCTURES
+            , { filter: (s: Structure) => s.hits < s.hitsMax && s.hits < 100000}
+            );
         for (const tower of towers)
         {
             if (hostileCreeps.length > 0)
             {
                 tower.attack(hostileCreeps[0]);
+            }
+            else if (demagedStructures)
+            {
+                tower.repair(demagedStructures[0]);
             }
         }
     }
