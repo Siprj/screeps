@@ -109,12 +109,14 @@ export function runBuilder(creep: Creep)
         }
         else
         {
-            const constructionSites: ConstructionSite[] = creep.room.find(FIND_CONSTRUCTION_SITES);
-            if (constructionSites.length > 0)
+            const constructionSite: (ConstructionSite | null) =
+                creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES);
+
+            if (constructionSite)
             {
-                if (creep.build(constructionSites[0]) === ERR_NOT_IN_RANGE)
+                if (creep.build(constructionSite) === ERR_NOT_IN_RANGE)
                 {
-                    creep.moveTo(constructionSites[0]);
+                    creep.moveTo(constructionSite);
                 }
             }
         }

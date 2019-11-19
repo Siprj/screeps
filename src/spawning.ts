@@ -54,7 +54,7 @@ function recomputeSourceCountMemory(
 
     for (const creep of creeps)
     {
-        sourceCreepCount[creep.id]++;
+        sourceCreepCount[creep.memory.roleMemory.sourceId]++;
     }
 }
 
@@ -76,6 +76,14 @@ export function spawnIfNeeded(room: Room)
     console.log("builderCount: " + builderCount);
     const energyDeficit = room.energyCapacityAvailable - room.energyAvailable;
 
+    const spawn = roomSpawns[0];
+    if (harvesterCount === 0 && spawn.spawning === null)
+    {
+        // Get emergency harvester...
+        const sources: Source[] = room.find(FIND_SOURCES);
+        spawnHarvester(spawn, sources[0]);
+        return;
+    }
     // if (Game.time % 50 === 0 && roomSpawns.length > 0)
     if (roomSpawns.length > 0 && energyDeficit === 0)
     {
@@ -93,7 +101,6 @@ export function spawnIfNeeded(room: Room)
         }
 
         recomputeSourceCountMemory(roomCreeps, room.memory.sourceCreepCount);
-        const spawn = roomSpawns[0];
 
         if (harvesterCount < room.memory.harvesterCount && spawn.spawning === null)
         {
