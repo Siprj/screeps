@@ -12,7 +12,7 @@ declare const enum WorkerState
     Repairing = 4,
     Upgrading = 5,
     PickingUp = 6,
-    Filling = 6,
+    Filling = 7,
 }
 
 interface WorkerMemory

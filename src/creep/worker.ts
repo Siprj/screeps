@@ -326,7 +326,7 @@ function move(creep: Creep, workerMemory: WorkerMemory)
 
     if (!creep.pos.inRangeTo(pos, workerMemory.targetPosDistance))
     {
-        const ret = creep.moveTo(pos);
+        creep.moveTo(pos);
     }
     else
     {
@@ -337,17 +337,31 @@ function move(creep: Creep, workerMemory: WorkerMemory)
 
 function pickUp(creep: Creep, workerMemory: WorkerMemory)
 {
+    console.log("PickingUp");
     // TODO: function body :D
+    goGetEnergy(creep, workerMemory);
 }
 
 function fill(creep: Creep, workerMemory: WorkerMemory)
 {
-    const structure = Game.getObjectById<Structure>(workerMemory.targetId);
+    const structure = Game.getObjectById<
+        StructureExtension
+        | StructureStorage
+        | StructureSpawn>(workerMemory.targetId);
     if (structure)
     {
         for(const resourceType in creep.carry)
         {
             creep.transfer(structure, resourceType as ResourceConstant);
+        }
+
+        if (creep.carry.getUsedCapacity() - structure.store.getFreeCapacity() > 0)
+        {
+            decideWhatToDoNext(creep, workerMemory);
+        }
+        else
+        {
+            goGetEnergy(creep, workerMemory);
         }
     }
     else
@@ -383,7 +397,7 @@ function runWorkerF(creep: Creep, workerMemory: WorkerMemory)
             fill(creep, workerMemory);
             break;
         default:
-            console.log("runWorker: unknown state reached");
+            console.log("runWorkerF: unknown state reached: " + workerMemory.state);
             // TODO: send email about unknown state reached
             break;
     }
