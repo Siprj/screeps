@@ -38,8 +38,6 @@ export const loop = () =>
         , (cs: ConstructionSite) =>
             cs.structureType === STRUCTURE_EXTENSION
         ).length;
-    console.log(extensionCount);
-    console.log(extensionCSCount);
 
     if ((extensionCount + extensionCSCount) < CONTROLLER_STRUCTURES[STRUCTURE_EXTENSION][controller.level])
     {

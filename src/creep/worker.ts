@@ -109,6 +109,7 @@ function upgradeController(creep: Creep, workerMemory: WorkerMemory, always: boo
         if (creep.room.controller.ticksToDowngrade < 5000 || always)
         {
             filMoveTo(workerMemory, creep.room.controller, WorkerState.Upgrading, 3);
+            move(creep, workerMemory);
             return true;
         }
     }
@@ -133,6 +134,7 @@ function spawnAndExtensions(creep: Creep, workerMemory: WorkerMemory): boolean
     if (spawnerAndExtensions)
     {
         filMoveTo(workerMemory, spawnerAndExtensions, WorkerState.Filling, 1);
+        move(creep, workerMemory);
         return true;
     }
 
@@ -146,6 +148,7 @@ function spawnAndExtensions(creep: Creep, workerMemory: WorkerMemory): boolean
     if (towers)
     {
         filMoveTo(workerMemory, towers, WorkerState.Filling, 1);
+        move(creep, workerMemory);
         return true;
     }
 
@@ -179,6 +182,7 @@ function repairStructures(creep: Creep, workerMemory: WorkerMemory): boolean
     if (demagedStructure)
     {
         filMoveTo(workerMemory, demagedStructure, WorkerState.Repairing, 3);
+        move(creep, workerMemory);
         return true;
     }
 
@@ -193,6 +197,7 @@ function buildStructures(creep: Creep, workerMemory: WorkerMemory): boolean
     if (constructionSite)
     {
         filMoveTo(workerMemory, constructionSite, WorkerState.Building, 3);
+        move(creep, workerMemory);
         return true;
     }
     return false;
@@ -350,18 +355,19 @@ function fill(creep: Creep, workerMemory: WorkerMemory)
         | StructureSpawn>(workerMemory.targetId);
     if (structure)
     {
-        for(const resourceType in creep.carry)
+        if (creep.carry.getUsedCapacity(RESOURCE_ENERGY) > 0)
         {
-            creep.transfer(structure, resourceType as ResourceConstant);
-        }
-
-        console.log("creep.carry.getUsedCapacity(): " + creep.carry.getUsedCapacity());
-        console.log("structure.store.getFreeCapacity(): " + structure.store.getFreeCapacity());
-        console.log("structure.store.getFreeCapacity(): " + structure.store.getUsedCapacity());
-        console.log("creep.carry.getUsedCapacity() - structure.store.getFreeCapacity(): " + (creep.carry.getUsedCapacity() - structure.store.getFreeCapacity()));
-        if (creep.carry.getUsedCapacity() - structure.store.getFreeCapacity() > 0)
-        {
-            decideWhatToDoNext(creep, workerMemory);
+            if (structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0)
+            {
+                for (const resourceType in creep.carry)
+                {
+                    creep.transfer(structure, resourceType as ResourceConstant);
+                }
+            }
+            else
+            {
+                decideWhatToDoNext(creep, workerMemory);
+            }
         }
         else
         {
@@ -371,8 +377,8 @@ function fill(creep: Creep, workerMemory: WorkerMemory)
     else
     {
         console.log("fill: ERROR: can't fill target with this ID!!!");
+        goGetEnergy(creep, workerMemory);
     }
-    goGetEnergy(creep, workerMemory);
 }
 
 function runWorkerF(creep: Creep, workerMemory: WorkerMemory)
