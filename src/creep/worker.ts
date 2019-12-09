@@ -355,6 +355,10 @@ function fill(creep: Creep, workerMemory: WorkerMemory)
             creep.transfer(structure, resourceType as ResourceConstant);
         }
 
+        console.log("creep.carry.getUsedCapacity(): " + creep.carry.getUsedCapacity());
+        console.log("structure.store.getFreeCapacity(): " + structure.store.getFreeCapacity());
+        console.log("structure.store.getFreeCapacity(): " + structure.store.getUsedCapacity());
+        console.log("creep.carry.getUsedCapacity() - structure.store.getFreeCapacity(): " + (creep.carry.getUsedCapacity() - structure.store.getFreeCapacity()));
         if (creep.carry.getUsedCapacity() - structure.store.getFreeCapacity() > 0)
         {
             decideWhatToDoNext(creep, workerMemory);
