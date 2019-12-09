@@ -1537,7 +1537,7 @@ interface CPUShardLimits {
     [shard: string]: number;
 }
 
-type StoreDefinition = Partial<Record<_ResourceConstantSansEnergy, number>> & { 
+type StoreDefinition = Partial<Record<_ResourceConstantSansEnergy, number>> & {
     energy : number;
     /**
     * Returns capacity of this store for the specified resource, or

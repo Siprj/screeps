@@ -40,6 +40,7 @@ export const loop = () =>
         ).length;
     console.log(extensionCount);
     console.log(extensionCSCount);
+
     if ((extensionCount + extensionCSCount) < CONTROLLER_STRUCTURES[STRUCTURE_EXTENSION][controller.level])
     {
         const spiralN = (mainSpawn.memory.spiralN === null) ? 0 : mainSpawn.memory.spiralN;

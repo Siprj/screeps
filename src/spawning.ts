@@ -1,4 +1,4 @@
-import { spawnBuilder, spawnHarvester, spawnUpgrader } from "creeps";
+import { spawnWorker } from "creeps";
 
 function initMemoryBySource
     ( sources: Source[]
@@ -16,17 +16,9 @@ function initMemoryBySource
 
 function initCreepCount(memory: RoomMemory)
 {
-    if (!memory.harvesterCount)
+    if (!memory.workerCount)
     {
-        memory.harvesterCount = 3;
-    }
-    if (!memory.builderCount)
-    {
-        memory.builderCount = 3;
-    }
-    if (!memory.upgraderCount)
-    {
-        memory.upgraderCount = 3;
+        memory.workerCount = 10;
     }
 }
 
@@ -62,26 +54,18 @@ export function spawnIfNeeded(room: Room)
 {
     const roomSpawns = room.find(FIND_MY_SPAWNS);
     const roomCreeps = room.find(FIND_MY_CREEPS);
-    const harvesterCount = _.filter(roomCreeps,
-        (creep: Creep) => creep.memory.role === "harvester").length;
+    const workerCount = _.filter(roomCreeps,
+        (creep: Creep) => creep.memory.role === CreepRole.Worker).length;
 
-    const upgraderCount = _.filter(roomCreeps,
-        (creep: Creep) => creep.memory.role === "upgrader").length;
-
-    const builderCount = _.filter(roomCreeps,
-        (creep: Creep) => creep.memory.role === "builder").length;
-
-    console.log("harvesterCount: " + harvesterCount);
-    console.log("upgraderCount: " + upgraderCount);
-    console.log("builderCount: " + builderCount);
+    console.log("workerCount: " + workerCount);
     const energyDeficit = room.energyCapacityAvailable - room.energyAvailable;
 
     const spawn = roomSpawns[0];
-    if (harvesterCount === 0 && spawn.spawning === null)
+    if (workerCount === 0 && spawn.spawning === null)
     {
         // Get emergency harvester...
         const sources: Source[] = room.find(FIND_SOURCES);
-        spawnHarvester(spawn, sources[0]);
+        spawnWorker(spawn, sources[0]);
         return;
     }
     // if (Game.time % 50 === 0 && roomSpawns.length > 0)
@@ -102,25 +86,11 @@ export function spawnIfNeeded(room: Room)
 
         recomputeSourceCountMemory(roomCreeps, room.memory.sourceCreepCount);
 
-        if (harvesterCount < room.memory.harvesterCount && spawn.spawning === null)
+        if (workerCount < room.memory.workerCount && spawn.spawning === null)
         {
             console.log("spawning harvester");
             const source = getPreferedSource(room.memory, sources);
-            spawnHarvester(spawn, source);
-            room.memory.sourceCreepCount[source.id]++;
-        }
-        else if (upgraderCount < room.memory.upgraderCount && spawn.spawning === null)
-        {
-            console.log("spawning upgrader");
-            const source = getPreferedSource(room.memory, sources);
-            spawnUpgrader(spawn, source);
-            room.memory.sourceCreepCount[source.id]++;
-        }
-        else if (builderCount < room.memory.builderCount && spawn.spawning === null)
-        {
-            console.log("spawning builder");
-            const source = getPreferedSource(room.memory, sources);
-            spawnBuilder(spawn, source);
+            spawnWorker(spawn, source);
             room.memory.sourceCreepCount[source.id]++;
         }
     }

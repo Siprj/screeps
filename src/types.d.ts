@@ -1,26 +1,36 @@
-interface UpgraderMemory
+
+declare const enum CreepRole
 {
-    working: boolean;
-    sourceId: string;
+    Worker = 1
 }
 
-interface HarvesterMemory
+declare const enum WorkerState
 {
-    working: boolean;
-    sourceId: string;
+    Mining = 1,
+    Moving = 2,
+    Building = 3,
+    Repairing = 4,
+    Upgrading = 5,
+    PickingUp = 6,
+    Filling = 6,
 }
 
-interface BuilderMemory
+interface WorkerMemory
 {
-    working: boolean;
     sourceId: string;
+
+    state: WorkerState;
     targetId: string;
+    targetPos: RoomPosition;
+    targetPosDistance: number;
+    nextState: WorkerState; // Next state in case the current state is move state.
+    // Not ideal solution but hack.. I don't care.
 }
 
 interface CreepMemory
 {
-  role: string;
-  roleMemory: HarvesterMemory | UpgraderMemory | BuilderMemory;
+    role: CreepRole;
+    roleMemory: WorkerMemory;
 }
 
 interface SpawnMemory
@@ -31,9 +41,7 @@ interface SpawnMemory
 
 interface RoomMemory
 {
-    harvesterCount: number;
-    builderCount: number;
-    upgraderCount: number;
+    workerCount: number;
     sourceCreepCount: {[sourceId: string]: number};
     sourceCreepRatio: {[sourceId: string]: number};
 }
