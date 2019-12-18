@@ -40,12 +40,12 @@ function getWorkerBodyParts(availableEnergy: number): BodyPartConstant[]
 
     const workerBase: BodyPartConstant[] = [MOVE, MOVE, WORK, CARRY, CARRY];
     const workerBasePrice: number = 300;
-    const n = _.floor(availableEnergy / workerBasePrice);
+    const n = _.min([_.floor(availableEnergy / workerBasePrice), 10]);
 
     const body: BodyPartConstant[] = _.flatten(_.times(n, _.constant(workerBase)));
     let remainingEnergy = availableEnergy - (workerBasePrice * n);
 
-    while (remainingEnergy > 0)
+    while (remainingEnergy > 0 && body.length < 50)
     {
         if (remainingEnergy >= 200)
         {

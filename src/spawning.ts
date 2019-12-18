@@ -63,9 +63,12 @@ export function spawnIfNeeded(room: Room)
     const spawn = roomSpawns[0];
     if (workerCount === 0 && spawn.spawning === null)
     {
+        console.log("Spawing emergency creep!");
         // Get emergency harvester...
         const sources: Source[] = room.find(FIND_SOURCES);
-        spawnWorker(spawn, sources[0]);
+        const source = getPreferedSource(room.memory, sources);
+        spawnWorker(spawn, source);
+        room.memory.sourceCreepCount[source.id]++;
         return;
     }
     // if (Game.time % 50 === 0 && roomSpawns.length > 0)
